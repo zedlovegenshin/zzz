@@ -62,7 +62,7 @@ module system_top (
 
   inout   [1:0]   btn,
   inout   [5:0]   led,
-  
+
   inout           iic_scl,
   inout           iic_sda,
 
@@ -86,8 +86,38 @@ module system_top (
   wire    [63:0]  gpio_i;
   wire    [63:0]  gpio_o;
   wire    [63:0]  gpio_t;
-  
+  wire            spi_clk;
+  wire            echo_clk;
+  reg             echo_clk_s;
+  wire            cn0561_dclk_s;
+
+  assign cn0561_dclk = cn0561_dclk_s;
+
+  reg  cdc_sync_stage1 = 'h0;
+  reg  cdc_sync_stage2 = 'h0;
+
+  always @(posedge spi_clk) begin
+    cdc_sync_stage1 <= cn0561_dclk_s;
+    echo_clk_s <= cdc_sync_stage1;
+  end
+
   // instantiations
+
+  BUFG BUFG_inst (
+    .O(echo_clk), // 1-bit output: Clock output
+    .I(echo_clk_s)  // 1-bit input: Clock input
+  );
+
+//  BUFR #(
+//    .BUFR_DIVIDE("BYPASS"),   // Values: "BYPASS, 1, 2, 3, 4, 5, 6, 7, 8"
+//    .SIM_DEVICE("7SERIES")  // Must be set to "7SERIES"
+//  )
+//  BUFR_inst (
+//    .O(echo_clk),     // 1-bit output: Clock output port
+////    .CE(1),   // 1-bit input: Active high, clock enable (Divided modes only)
+////    .CLR(0), // 1-bit input: Active high, asynchronous clear (Divided modes only)
+//    .I(echo_clk_s)      // 1-bit input: Clock buffer input driven by an IBUF, MMCM or local interconnect
+//  );
 
   ad_iobuf #(
     .DATA_WIDTH(2)
@@ -106,7 +136,7 @@ module system_top (
     .dio_p(led));
 
   assign gpio_i[63:33] = gpio_o[63:33];
-  
+
   ad_iobuf #(
     .DATA_WIDTH(1)
   ) i_iobuf_cn0561_gpio (
@@ -114,8 +144,6 @@ module system_top (
     .dio_i(gpio_o[32]),
     .dio_o(gpio_i[32]),
     .dio_p({cn0561_pdn}));
-
-
 
   system_wrapper i_system_wrapper (
     .ddr_addr (ddr_addr),
@@ -160,11 +188,13 @@ module system_top (
     .spi1_sdi_i (1'b0),
     .spi1_sdo_i (1'b0),
     .spi1_sdo_o (),
+    .spi_clk (spi_clk),
+    .echo_clk (echo_clk),
     .cn0561_di_sdo (),
     .cn0561_di_sdo_t (),
     .cn0561_di_sdi (cn0561_din),
     .cn0561_di_cs (),
-    .cn0561_di_sclk (cn0561_dclk),
+    .cn0561_di_sclk (cn0561_dclk_s),
     .cn0561_odr (cn0561_odr));
 
 endmodule

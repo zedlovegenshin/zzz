@@ -32,3 +32,17 @@ set adc_num_of_channels 4
 
 source ../common/cn0561_bd.tcl
 
+create_bd_port -dir I -type clk echo_clk
+create_bd_port -dir O -type clk spi_clk
+
+ad_connect axi_cn0561_clkgen/clk_0  spi_clk
+
+current_bd_instance /cn0561_spi
+	create_bd_pin -dir I -type clk echo_clk
+	ad_ip_parameter execution CONFIG.ECHO_SCLK 1
+	ad_connect execution/echo_sclk echo_clk
+
+current_bd_instance /
+
+ad_connect echo_clk   cn0561_spi/echo_clk
+

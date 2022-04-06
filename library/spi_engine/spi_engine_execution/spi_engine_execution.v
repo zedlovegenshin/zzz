@@ -60,20 +60,20 @@ module spi_engine_execution #(
   input [(DATA_WIDTH-1):0] sdo_data,
 
 
-  input sdi_data_ready,
-  output reg sdi_data_valid,
-  output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
+ (* mark_debug = "true" *) input sdi_data_ready,
+ (* mark_debug = "true" *) output reg sdi_data_valid,
+ (* mark_debug = "true" *) output [(NUM_OF_SDI * DATA_WIDTH)-1:0] sdi_data,
 
   input sync_ready,
   output reg sync_valid,
   output [7:0] sync,
 
-  input echo_sclk,
-  output reg sclk,
+ (* mark_debug = "true" *) input echo_sclk,
+ (* mark_debug = "true" *) output reg sclk,
   output reg sdo,
   output reg sdo_t,
-  input [NUM_OF_SDI-1:0] sdi,
-  output reg [NUM_OF_CS-1:0] cs,
+ (* mark_debug = "true" *) input [NUM_OF_SDI-1:0] sdi,
+ (* mark_debug = "true" *) output reg [NUM_OF_CS-1:0] cs,
   output reg three_wire
 );
 
@@ -125,7 +125,7 @@ reg [7:0] word_length = DATA_WIDTH;
 reg [7:0] left_aligned = 8'b0;
 wire end_of_word;
 
-reg [7:0] sdi_counter = 8'b0;
+ (* mark_debug = "true" *)reg [7:0] sdi_counter = 8'b0;
 
 assign first_bit = ((bit_counter == 'h0) ||  (bit_counter == word_length));
 
@@ -163,7 +163,7 @@ wire io_ready1;
 wire io_ready2;
 wire trigger_rx_s;
 
-wire last_sdi_bit;
+ (* mark_debug = "true" *)wire last_sdi_bit;
 wire end_of_sdi_latch;
 
 (* direct_enable = "yes" *) wire cs_gen;
