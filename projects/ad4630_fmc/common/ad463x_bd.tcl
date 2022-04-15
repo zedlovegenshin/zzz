@@ -36,7 +36,7 @@ create_bd_port -dir I ad463x_ext_clk
 ad_ip_instance axi_clkgen spi_clkgen
 ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
 ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
-ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 8
+ad_ip_parameter spi_clkgen CONFIG.VCO_MUL 10
 ad_connect $sys_cpu_clk spi_clkgen/clk
 ad_connect spi_clk spi_clkgen/clk_0
 
