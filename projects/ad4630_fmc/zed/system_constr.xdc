@@ -15,7 +15,7 @@ set_property -dict {PACKAGE_PIN L18 IOSTANDARD LVCMOS25} [get_ports ad463x_ext_c
 create_clock -period 10.000 -name cnv_ext_clk [get_ports ad463x_ext_clk]
 
 # SCLK echod clock, tuned to 80 MHz //, phase shifted with 30% (aprox. 4ns)
-create_clock -period 12.500 -name ECHOSCLK_clk [get_ports ad463x_echo_sclk]
+create_clock -period 11.764 -name ECHOSCLK_clk [get_ports ad463x_echo_sclk]
 
 # rename auto-generated clock for SPIEngine to spi_clk - 160MHz
 # NOTE: clk_fpga_0 is the first PL fabric clock, also called $sys_cpu_clk
