@@ -96,6 +96,7 @@ module system_top #(
   input           ad463x_ext_clk,
   output          ad463x_cnv,
   input           ad463x_busy,
+  output          ad463x_busy_probe,
   inout           ad463x_resetn
 
 );
@@ -117,6 +118,7 @@ module system_top #(
   // instantiations
 
   assign gpio_i[63:33] = 31'b0;
+  assign ad463x_busy_probe = ad463x_busy;
 
   ad_data_clk #(
     .SINGLE_ENDED (1))
