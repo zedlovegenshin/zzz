@@ -156,7 +156,15 @@ if {$CAPTURE_ZONE == 1} {
   exit 2
 
 }
-ad_connect ad463x_cnv cnv_generator/pwm_1
+#ad_connect ad463x_cnv cnv_generator/pwm_1
+
+ad_ip_instance util_vector_logic cnv_gate
+ad_ip_parameter cnv_gate CONFIG.C_SIZE 1
+ad_ip_parameter cnv_gate CONFIG.C_OPERATION {and}
+
+ad_connect cnv_gate/Op1 axi_ad463x_dma/s_axis_xfer_req
+ad_connect cnv_gate/Op2 cnv_generator/pwm_1
+ad_connect cnv_gate/Res ad463x_cnv
 
 # clocks
 
