@@ -12,6 +12,8 @@ set hier_spi_engine spi_pulsar_adc
 
 spi_engine_create $hier_spi_engine $data_width $async_spi_clk $num_cs $num_sdi $sdi_delay
 
+ad_ip_parameter $hier_spi_engine/offload CONFIG.CMD_MEM_ADDRESS_WIDTH 7
+
 ad_ip_instance axi_clkgen spi_clkgen
 ad_ip_parameter spi_clkgen CONFIG.CLK0_DIV 5
 ad_ip_parameter spi_clkgen CONFIG.VCO_DIV 1
