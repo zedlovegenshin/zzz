@@ -15,6 +15,7 @@ Here are some pointers to help you:
   * Parts : [AD7980: 16-Bit, 1 MSPS, PulSAR ADC in MSOP/LFCSP](https://www.analog.com/ad7980)
   * Parts : [AD7983: 16-Bit, 1.33 MSPS PulSAR ADC in MSOP/LFCSP](https://www.analog.com/ad7983)
   * Parts : [AD7690: 18-Bit, 1.5 LSB INL, 400 kSPS PulSAR Differential ADC in MSOP/QFN](https://www.analog.com/ad7690)
+  * Parts : [AD7689: 16-Bit, 8-Channel, 250 kSPS PulSAR ADC](https://www.analog.com/ad7689)
   * Project Doc: https://wiki.analog.com/resources/eval/10-lead-pulsar-adc-evaluation-board
   * HDL Doc: https://wiki.analog.com/resources/eval/user-guides/pulsar_adc_pmods_hdl
   * Linux Drivers: https://wiki.analog.com/resources/tools-software/linux-drivers/iio-adc/ad7476a
@@ -36,3 +37,5 @@ Here are some pointers to help you:
   * AD7690
   * AD7982
   * AD7984
+  * AD7682
+  * AD7689
