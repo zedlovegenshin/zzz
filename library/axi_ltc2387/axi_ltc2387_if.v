@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright 2021 - 2022 (c) Analog Devices, Inc. All rights reserved.
+// Copyright 2021 - 2023 (c) Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -43,8 +43,8 @@ module axi_ltc2387_if #(
   parameter IO_DELAY_GROUP = "adc_if_delay_group",
   parameter IODELAY_CTRL = 1,
   parameter DELAY_REFCLK_FREQUENCY = 200,
-  parameter [0:0] TWOLANES = 1, // 0 for Single Lane, 1 for Two Lanes
-  parameter RESOLUTION = 16     // 16 or 18 bits
+  parameter TWOLANES = 1,    // 0 - one lane, 1 - two lanes
+  parameter RESOLUTION = 18  // 16 or 18 bits
 ) (
 
   // delay interface
