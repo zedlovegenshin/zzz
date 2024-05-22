@@ -6,7 +6,7 @@
 set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*/ad408x_interface/adc_data_d_reg[*]}] \
     -to [get_cells -hierarchical * -filter {NAME=~*/ad408x_interface/adc_data_dd_reg[*]*}]
-    
+#
 set_false_path \
   -from [get_cells -hierarchical * -filter {NAME=~*/ad408x_interface/sync_status_int_d_reg*}] \
     -to [get_cells -hierarchical * -filter {NAME=~*/ad408x_interface/sync_status_int_dd_reg*}]
