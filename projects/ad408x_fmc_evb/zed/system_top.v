@@ -85,30 +85,49 @@ module system_top (
 
   // FMC connector
   // LVDS data interace
+  input           adca_clk_p,
+  input           adca_clk_n,
 
-  input           dco_p,
-  input           dco_n,
-  input           da_p,
-  input           da_n,
-  input           db_p,
-  input           db_n,
-  input           cnv_in_p,
-  input           cnv_in_n,
+  input           adca_dco_p,
+  input           adca_dco_n,
 
-  // SPI data interface
+  input           adca_da_p,
+  input           adca_da_n,
+  input           adca_db_p,
+  input           adca_db_n,
 
-  input           doa_fmc,
-  input           dob_fmc,
-  input           doc_fmc,
-  input           dod_fmc,
+  input           adca_cnv_in_p,
+  input           adca_cnv_in_n,
 
-  output          gp0_dir,
-  output          gp1_dir,
-  output          gp2_dir,
-  output          gp3_dir,
-  inout           gpio1_fmc,
-  inout           gpio2_fmc,
-  inout           gpio3_fmc,
+  input           adcb_clk_p,
+  input           adcb_clk_n,
+
+  input           adcb_dco_p,
+  input           adcb_dco_n,
+
+  input           adcb_da_p,
+  input           adcb_da_n,
+  input           adcb_db_p,
+  input           adcb_db_n,
+
+  input           adcb_cnv_in_p,
+  input           adcb_cnv_in_n,
+
+  output          adca_gp0_dir,
+  output          adca_gp1_dir,
+  output          adca_gp2_dir,
+  output          adca_gp3_dir,
+  inout           adca_gpio1_fmc,
+  inout           adca_gpio2_fmc,
+  inout           adca_gpio3_fmc,
+
+  output          adcb_gp0_dir,
+  output          adcb_gp1_dir,
+  output          adcb_gp2_dir,
+  output          adcb_gp3_dir,
+  inout           adcb_gpio1_fmc,
+  inout           adcb_gpio2_fmc,
+  inout           adcb_gpio3_fmc,
 
   input           pwrgd,
   input           adf435x_lock,
@@ -116,22 +135,26 @@ module system_top (
   output          pd_v33b,
   output          osc_en,
   output          ad9508_sync,
-  inout   [8:0]   pbio,
 
-  // ADC SPI
+  // ADC SPI ports
 
-  input           gpio0_fmc,
-  output          sclk_src,
-  output          cs_n_src,
-  output          sdio_src,
+  input           adca_gpio0_fmc,
+  output          adca_sclk_src,
+  output          adca_cs_n_src,
+  output          adca_sdio_src,
+
+  input           adcb_gpio0_fmc,
+  output          adcb_sclk_src,
+  output          adcb_cs_n_src,
+  output          adcb_sdio_src,
 
   // Clock chips SPI
 
-  input           sdo_1, //ad9508
-  output          sclk1,
-  output          sdin1,
-  output          cs1_0, //ad9508
-  output          cs1_1  //adf4350
+  input           ad9508_adf4350_sdi,
+  output          ad9508_adf4350_sdo,
+  output          ad9508_adf4350_sclk,
+  output          ad9508_cs,
+  output          adf4350_cs
 );
 
   // internal signals
@@ -147,62 +170,61 @@ module system_top (
   wire    [ 1:0]  iic_mux_sda_o_s;
   wire            iic_mux_sda_t_s;
 
-
-  wire            filter_data_ready_n;
+  wire            adca_filter_data_ready_n;
+  wire            adcb_filter_data_ready_n;
   wire            sys_cpu_out_clk;
 
   reg             ad9508_sync_s = 1'b1;
-  reg     [ 3:0]  sync_req_d    = 4'b0;
   reg     [26:0]  dbg_cnt       =  'b0;
-  reg     [26:0]  dbg_cnt_f     =  'b0;
-  reg     [26:0]  dbg_cnt_100_f =  'b0;
+
+
+  assign gpio_i[63:40] = gpio_o[63:40];
+  assign gpio_i[38]    = adf435x_lock;
+  assign gpio_i[37]    = pwrgd;
+  assign sync_req      = gpio_o[39];
 
   assign ad9508_sync   = ad9508_sync_s;
-  assign gpio_i[35]    = adf435x_lock;
-  assign gpio_i[36]    = pwrgd;
-  assign gpio_i[63:37] = gpio_o[63:37];
 
-  assign gp0_dir  = 1'b0;
-  assign gp1_dir  = 1'b0;
-  assign gp2_dir  = 1'b0;
-  assign gp3_dir  = 1'b0;
-  assign en_psu   = 1'b1;
-  assign osc_en   = pwrgd;
-  assign sync_req = gpio_o[42];
-  assign pd_v33b  = 1'b1;
+  assign adca_gp0_dir  = 1'b0;
+  assign adca_gp1_dir  = 1'b0;
+  assign adca_gp2_dir  = 1'b0;
+  assign adca_gp3_dir  = 1'b0;
 
-  // always @(posedge sys_cpu_out_clk) begin
-    // sync_req_d <= {sync_req_d[2:0],sync_req};
-    // if (sync_req_d[2] & ~sync_req_d[3]) begin
-      // ad9508_sync_s <= 1'b0;
-    // end else if (~sync_req_d[2] & sync_req_d[3]) begin
-      // ad9508_sync_s <= 1'b1;
-    // end
-  // end
-
-  // Dummy function to prevent sys_cpu_out_clk optimization
-  // Even if the clock is not used the diff termination should help signal
-  // integrity
+  assign adcb_gp0_dir  = 1'b0;
+  assign adcb_gp1_dir  = 1'b0;
+  assign adcb_gp2_dir  = 1'b0;
+  assign adcb_gp3_dir  = 1'b0;
+  assign en_psu        = 1'b1;
+  assign osc_en        = pwrgd;
+  assign pd_v33b       = 1'b1;
 
   always @(posedge sys_cpu_out_clk) begin
     dbg_cnt <= dbg_cnt + 1;
   end
 
   ad_iobuf #(
-    .DATA_WIDTH(2)
-  ) i_gpio_3_2_mach1 (
-    .dio_t(gpio_t[34:33]),
-    .dio_i(gpio_o[34:33]),
-    .dio_o(gpio_i[34:33]),
-    .dio_p({gpio3_fmc,gpio2_fmc}));
+    .DATA_WIDTH(4)
+  ) i_gpio_3_2_adca_adcb (
+    .dio_t(gpio_t[36:33]),
+    .dio_i(gpio_o[36:33]),
+    .dio_o(gpio_i[36:33]),
+    .dio_p({adcb_gpio3_fmc,adcb_gpio2_fmc,adca_gpio3_fmc,adca_gpio2_fmc}));
 
   ad_iobuf #(
     .DATA_WIDTH(1)
-  ) i_gpio_1_mach1 (
+  ) i_gpio_1_adca (
     .dio_t(1'b1),
     .dio_i(1'b0),
-    .dio_o(filter_data_ready_n),
-    .dio_p(gpio1_fmc));
+    .dio_o(adca_filter_data_ready_n),
+    .dio_p(adca_gpio1_fmc));
+
+ ad_iobuf #(
+   .DATA_WIDTH(1)
+ ) i_gpio_1_adcb (
+   .dio_t(1'b1),
+   .dio_i(1'b0),
+   .dio_o(adcb_filter_data_ready_n),
+   .dio_p(adcb_gpio1_fmc));
 
   ad_iobuf #(
     .DATA_WIDTH(29)
@@ -274,33 +296,55 @@ module system_top (
     .otg_vbusoc (otg_vbusoc),
     .spdif (spdif),
     .spi0_clk_i (1'b0),
-    .spi0_clk_o (sclk_src),
-    .spi0_csn_0_o (cs_n_src),
+    .spi0_clk_o (adca_sclk_src),
+    .spi0_csn_0_o (adca_cs_n_src),
     .spi0_csn_1_o (),
     .spi0_csn_2_o (),
     .spi0_csn_i (1'b1),
-    .spi0_sdi_i (gpio0_fmc),
+    .spi0_sdi_i (adca_gpio0_fmc),
     .spi0_sdo_i (1'b0),
-    .spi0_sdo_o (sdio_src),
+    .spi0_sdo_o (adca_sdio_src),
+
     .spi1_clk_i (1'b0),
-    .spi1_clk_o (sclk1),
-    .spi1_csn_0_o (cs1_0),
-    .spi1_csn_1_o (cs1_1),
+    .spi1_clk_o (adcb_sclk_src),
+    .spi1_csn_0_o (adcb_cs_n_src),
+    .spi1_csn_1_o (),
     .spi1_csn_2_o (),
     .spi1_csn_i (1'b1),
-    .spi1_sdi_i (sdo_1),
+    .spi1_sdi_i (adcb_gpio0_fmc),
     .spi1_sdo_i (1'b0),
-    .spi1_sdo_o (sdin1),
-    .dco_p (dco_p),
-    .dco_n (dco_n),
-    .da_p (da_p),
-    .da_n (da_n),
-    .db_p (db_p),
-    .db_n (db_n),
-    .cnv_in_p(cnv_in_p),
-    .cnv_in_n(cnv_in_n),
-    .filter_data_ready_n(filter_data_ready_n),
-    .sync_n (ad9508_sync),
+    .spi1_sdo_o (adcb_sdio_src),
+
+    .adca_dco_p (adca_dco_p),
+    .adca_dco_n (adca_dco_n),
+    .adca_da_p (adca_da_p),
+    .adca_da_n (adca_da_n),
+    .adca_db_p (adca_db_p),
+    .adca_db_n (adca_db_n),
+    .adca_cnv_in_p(adca_cnv_in_p),
+    .adca_cnv_in_n(adca_cnv_in_n),
+    .adca_filter_data_ready_n(adca_filter_data_ready_n),
+    .adca_sync_n (ad9508_sync),
+
+    .adcb_dco_p (adcb_dco_p),
+    .adcb_dco_n (adcb_dco_n),
+    .adcb_da_p (adcb_da_p),
+    .adcb_da_n (adcb_da_n),
+    .adcb_db_p (adcb_db_p),
+    .adcb_db_n (adcb_db_n),
+    .adcb_cnv_in_p(adcb_cnv_in_p),
+    .adcb_cnv_in_n(adcb_cnv_in_n),
+    .adcb_filter_data_ready_n(adcb_filter_data_ready_n),
+    .adcb_sync_n (ad9508_sync),
+
+    .ad9508_adf4350_csn_o({adf4350_cs,ad9508_cs}),
+    .ad9508_adf4350_csn_i(2'b11),
+    .ad9508_adf4350_clk_i(1'b0),
+    .ad9508_adf4350_clk_o(ad9508_adf4350_sclk),
+    .ad9508_adf4350_sdo_i(1'b0),
+    .ad9508_adf4350_sdo_o(ad9508_adf4350_sdo),
+    .ad9508_adf4350_sdi_i(ad9508_adf4350_sdi),
+
     .sys_cpu_out_clk (sys_cpu_out_clk));
 
 endmodule

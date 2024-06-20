@@ -91,10 +91,10 @@ module ad408x_phy #(
   localparam  ULTRASCALE       = 2;
   localparam  ULTRASCALE_PLUS  = 3;
 
-  parameter           IDLE         = 0,
-                      COUNT        = 1,
-                      FILTER_COUNT = 2,
-                      SYNC         = 3;
+  localparam  IDLE         = 0,
+              COUNT        = 1,
+              FILTER_COUNT = 2,
+              SYNC         = 3;
 
   wire   [ 1:0]  delay_locked_s;
   wire   [19:0]  pattern_value;
