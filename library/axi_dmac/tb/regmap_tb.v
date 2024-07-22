@@ -234,7 +234,7 @@ module regmap_tb;
 
   reg response_eot = 1'b0;
 
-  wire [7:0] response_measured_burst_length = 'hff;
+  wire [6:0] response_measured_burst_length = 'hff;
   wire ctrl_enable;
   wire ctrl_pause;
   wire request_valid;
