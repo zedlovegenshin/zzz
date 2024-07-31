@@ -155,3 +155,22 @@ ad_connect axi_tdd_0/tdd_channel_3 tdd_rx_mxfe_en
 ad_connect axi_tdd_0/tdd_channel_4 tdd_tx_mxfe_en
 ad_connect axi_tdd_0/tdd_channel_5 tdd_tx_stingray_en
 
+## tdd debug ports
+
+create_bd_port -dir O debug_tdd_tx_offload_sync
+create_bd_port -dir O debug_tdd_rx_offload_sync
+create_bd_port -dir O debug_tdd_enabled
+create_bd_port -dir O debug_tdd_rx_mxfe_en
+create_bd_port -dir O debug_tdd_tx_mxfe_en
+create_bd_port -dir O debug_tdd_tx_stingray_en
+create_bd_port -dir O debug_tdd_sync_in
+create_bd_port -dir O debug_tdd_sync_out
+
+ad_connect axi_tdd_0/tdd_channel_0  debug_tdd_tx_offload_sync
+ad_connect axi_tdd_0/tdd_channel_1  debug_tdd_rx_offload_sync
+ad_connect axi_tdd_0/tdd_channel_2  debug_tdd_enabled
+ad_connect axi_tdd_0/tdd_channel_3  debug_tdd_rx_mxfe_en
+ad_connect axi_tdd_0/tdd_channel_4  debug_tdd_tx_mxfe_en
+ad_connect axi_tdd_0/tdd_channel_5  debug_tdd_tx_stingray_en
+ad_connect tdd_sync                 debug_tdd_sync_in
+ad_connect axi_tdd_0/sync_out       debug_tdd_sync_out

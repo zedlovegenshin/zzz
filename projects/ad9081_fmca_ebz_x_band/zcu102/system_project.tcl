@@ -52,9 +52,9 @@ adi_project ad9081_fmca_ebz_x_band_zcu102 0 [list \
   SHARED_DEVCLK     [get_env_param SHARED_DEVCLK     1     ] \
   TDD_CHANNEL_CNT   [get_env_param TDD_CHANNEL_CNT   6     ] \
   TDD_SYNC_WIDTH    [get_env_param TDD_SYNC_WIDTH    0     ] \
-  TDD_SYNC_INT      [get_env_param TDD_SYNC_INT      0     ] \
-  TDD_SYNC_EXT      [get_env_param TDD_SYNC_EXT      1     ] \
-  TDD_SYNC_EXT_CDC  [get_env_param TDD_SYNC_EXT_CDC  1     ] \
+  TDD_SYNC_INT      [get_env_param TDD_SYNC_INT      1     ] \
+  TDD_SYNC_EXT      [get_env_param TDD_SYNC_EXT      0     ] \
+  TDD_SYNC_EXT_CDC  [get_env_param TDD_SYNC_EXT_CDC  0     ] \
 ]
 
 adi_project_files ad9081_fmca_ebz_x_band_zcu102 [list \
@@ -67,4 +67,3 @@ adi_project_files ad9081_fmca_ebz_x_band_zcu102 [list \
   "$ad_hdl_dir/projects/common/zcu102/zcu102_system_constr.xdc" ]
 
 adi_project_run ad9081_fmca_ebz_x_band_zcu102
-

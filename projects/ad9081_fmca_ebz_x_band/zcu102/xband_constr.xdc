@@ -42,3 +42,13 @@ set_property         -dict {PACKAGE_PIN AD6   IOSTANDARD LVCMOS18               
 set_property         -dict {PACKAGE_PIN AG10  IOSTANDARD LVCMOS18                       } [get_ports fmc_bob_xud1_gpio4      ]; ## FMC1.G18  IO_L5P_T0U_N8_AD14P_65
 set_property         -dict {PACKAGE_PIN AG9   IOSTANDARD LVCMOS18                       } [get_ports fmc_bob_xud1_gpio5      ]; ## FMC1.G19  IO_L5N_T0U_N9_AD14N_65
 
+
+
+set_property         -dict {PACKAGE_PIN H14   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_tx_offload_sync    ]; ## H14 L10N_AD10N_50_N LVCMOS33 6
+set_property         -dict {PACKAGE_PIN J14   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_rx_offload_sync    ]; ## J14 L10N_AD10P_50_P LVCMOS33 8
+set_property         -dict {PACKAGE_PIN G14   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_enabled            ]; ## G14 L9N_AD11N_50_N LVCMOS33 10
+set_property         -dict {PACKAGE_PIN G15   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_rx_mxfe_en         ]; ## G15 L9N_AD11P_50_P LVCMOS33 12
+set_property         -dict {PACKAGE_PIN J15   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_tx_mxfe_en         ]; ## J15 L12N_AD8N_50_N LVCMOS33 14
+set_property         -dict {PACKAGE_PIN J16   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_tx_stingray_en     ]; ## J16 L12N_AD8P_50_P LVCMOS33 16
+set_property         -dict {PACKAGE_PIN G16   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_sync_in            ]; ## G16 L11N_AD9N_50_N LVCMOS33 18
+set_property         -dict {PACKAGE_PIN H16   IOSTANDARD LVCMOS33                       } [get_ports debug_tdd_sync_out           ]; ## H16 L11N_AD9P_50_P LVCMOS33 20

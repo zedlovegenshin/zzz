@@ -126,7 +126,16 @@ module system_top  #(
   inout         fmc_bob_xud1_gpio2,
   inout         fmc_bob_xud1_gpio3,
   inout         fmc_bob_xud1_gpio4,
-  inout         fmc_bob_xud1_gpio5
+  inout         fmc_bob_xud1_gpio5,
+
+  output        debug_tdd_tx_offload_sync,
+  output        debug_tdd_rx_offload_sync,
+  output        debug_tdd_enabled,
+  output        debug_tdd_rx_mxfe_en,
+  output        debug_tdd_tx_mxfe_en,
+  output        debug_tdd_tx_stingray_en,
+  output        debug_tdd_sync_in,
+  output        debug_tdd_sync_out
 );
 
   // internal signals
@@ -400,7 +409,7 @@ module system_top  #(
              fmc_bob_xud1_gpio0}));     // 67
 
   assign tdd_support = TDD_SUPPORT ? tdd_enabled : 1'b0;
-  assign tdd_sync = gpio_i[76];
+  assign tdd_sync = gpio_o[79];
 
   assign fmc_bob_xud1_imu_rst = gpio_o[77];
 
@@ -409,7 +418,7 @@ module system_top  #(
   assign gpio_bd_o = gpio_o[7:0];
 
   // Unused GPIOs
-  assign gpio_i[94:77] = gpio_o[94:77];
+  assign gpio_i[94:80] = gpio_o[94:80];
   assign gpio_i[59:54] = gpio_o[59:54];
   assign gpio_i[66:64] = gpio_o[66:64];
   assign gpio_i[31:21] = gpio_o[31:21];
@@ -491,7 +500,15 @@ module system_top  #(
     .tdd_enabled (tdd_enabled),
     .tdd_rx_mxfe_en (tdd_rx_mxfe_en),
     .tdd_tx_mxfe_en (tdd_tx_mxfe_en),
-    .tdd_tx_stingray_en (tdd_tx_stingray_en));
+    .tdd_tx_stingray_en (tdd_tx_stingray_en),
+    .debug_tdd_tx_offload_sync(debug_tdd_tx_offload_sync),
+    .debug_tdd_rx_offload_sync(debug_tdd_rx_offload_sync),
+    .debug_tdd_enabled(debug_tdd_enabled),
+    .debug_tdd_rx_mxfe_en(debug_tdd_rx_mxfe_en),
+    .debug_tdd_tx_mxfe_en(debug_tdd_tx_mxfe_en),
+    .debug_tdd_tx_stingray_en(debug_tdd_tx_stingray_en),
+    .debug_tdd_sync_in(debug_tdd_sync_in),
+    .debug_tdd_sync_out(debug_tdd_sync_out));
 
   assign rx_data_p_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_p[RX_JESD_L*RX_NUM_LINKS-1:0];
   assign rx_data_n_loc[RX_JESD_L*RX_NUM_LINKS-1:0] = rx_data_n[RX_JESD_L*RX_NUM_LINKS-1:0];
