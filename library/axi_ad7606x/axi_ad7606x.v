@@ -53,8 +53,7 @@ module axi_ad7606x #(
 
   // physical control interface
 
-  input         rx_busy,
-  input         first_data,
+  input         rx_trigger,
 
   // AXI Slave Memory Map
 
@@ -82,16 +81,26 @@ module axi_ad7606x #(
 
   input         adc_dovf,
   output        adc_clk,
-
   output        adc_valid,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_0,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_1,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_2,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_3,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_4,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_5,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_6,
-  output [ADC_TO_DMA_N_BITS-1:0] adc_data_7,
+  output        adc_sync,
+
+  output [15:0] adc_data_0,
+  output [15:0] adc_data_1,
+  output [15:0] adc_data_2,
+  output [15:0] adc_data_3,
+  output [15:0] adc_data_4,
+  output [15:0] adc_data_5,
+  output [15:0] adc_data_6,
+  output [15:0] adc_data_7,
+  output [15:0] adc_data_8,
+  output [15:0] adc_data_9,
+  output [15:0] adc_data_10,
+  output [15:0] adc_data_11,
+  output [15:0] adc_data_12,
+  output [15:0] adc_data_13,
+  output [15:0] adc_data_14,
+  output [15:0] adc_data_15,
+
   output        adc_enable_0,
   output        adc_enable_1,
   output        adc_enable_2,
@@ -100,12 +109,18 @@ module axi_ad7606x #(
   output        adc_enable_5,
   output        adc_enable_6,
   output        adc_enable_7,
+  output        adc_enable_8,
+  output        adc_enable_9,
+  output        adc_enable_10,
+  output        adc_enable_11,
+  output        adc_enable_12,
+  output        adc_enable_13,
+  output        adc_enable_14,
+  output        adc_enable_15,
   output        adc_reset
 );
 
   localparam [31:0] RD_RAW_CAP = 32'h2000;
-  localparam        AD7606B = 1'b0;
-  localparam        AD7606C_16 = 1'b1;
 
   // internal registers
 
@@ -118,51 +133,67 @@ module axi_ad7606x #(
 
   // internal signals
 
-  wire [ADC_N_BITS-1:0] adc_data_0_s;
-  wire [ADC_N_BITS-1:0] adc_data_1_s;
-  wire [ADC_N_BITS-1:0] adc_data_2_s;
-  wire [ADC_N_BITS-1:0] adc_data_3_s;
-  wire [ADC_N_BITS-1:0] adc_data_4_s;
-  wire [ADC_N_BITS-1:0] adc_data_5_s;
-  wire [ADC_N_BITS-1:0] adc_data_6_s;
-  wire [ADC_N_BITS-1:0] adc_data_7_s;
-  wire [(8*ADC_N_BITS)-1:0] adc_data_s;
-  wire [ 7:0]           adc_status_header[0:7];
+  wire [15:0] adc_data_0_s;
+  wire [15:0] adc_data_1_s;
+  wire [15:0] adc_data_2_s;
+  wire [15:0] adc_data_3_s;
+  wire [15:0] adc_data_4_s;
+  wire [15:0] adc_data_5_s;
+  wire [15:0] adc_data_6_s;
+  wire [15:0] adc_data_7_s;
+  wire [15:0] adc_data_8_s;
+  wire [15:0] adc_data_9_s;
+  wire [15:0] adc_data_10_s;
+  wire [15:0] adc_data_11_s;
+  wire [15:0] adc_data_12_s;
+  wire [15:0] adc_data_13_s;
+  wire [15:0] adc_data_14_s;
+  wire [15:0] adc_data_15_s;
+
+  wire [127:0] adc_data_s;
+  wire [ 15:0]          adc_status_header[0:15];
   wire                  adc_status;
-  wire [15:0]           adc_crc;
-  wire [15:0]           adc_crc_res;
-  wire                  adc_crc_err;
+  //wire [15:0]           adc_crc;
+  //wire [15:0]           adc_crc_res;
+  //wire                  adc_crc_err;
   wire                  adc_mode_en;
   wire [ 7:0]           adc_custom_control;
 
-  wire                  adc_dfmt_enable_s[0:7];
-  wire                  adc_dfmt_type_s[0:7];
-  wire                  adc_dfmt_se_s[0:7];
+  wire                  adc_dfmt_enable_s[0:15];
+  wire                  adc_dfmt_type_s[0:15];
+  wire                  adc_dfmt_se_s[0:15];
 
   wire [ 7:0]           adc_enable;
   wire                  adc_reset_s;
 
-  wire [(8*ADC_TO_DMA_N_BITS)-1:0] dma_data;
+  wire [127:0]          dma_data;
   wire                  dma_dvalid;
 
   wire                  up_clk;
   wire                  up_rstn;
+  wire                  up_rst;
   wire                  up_rreq_s;
   wire [13:0]           up_raddr_s;
   wire                  up_wreq_s;
   wire [13:0]           up_waddr_s;
   wire [31:0]           up_wdata_s;
-  wire [31:0]           up_rdata_s[0:8];
-  wire [8:0]            up_rack_s;
-  wire [8:0]            up_wack_s;
+  wire [31:0]           up_rdata_s[0:16]; // 8 || 16 ?????
+  wire [16:0]           up_rack_s;
+  wire [16:0]           up_wack_s;
 
   wire                  up_wack_cntrl_s;
   wire                  up_rack_cntrl_s;
   wire [31:0]           up_rdata_cntrl_s;
 
-  wire [31:0]           wr_data_s;
+  wire                  trigger_s;
+
+  wire                  rd_req_s;
+  wire                  wr_req_s;
+  wire [15:0]           wr_data_s;
   wire [15:0]           rd_data_s;
   wire                  rd_valid_s;
+  wire [ 4:0]           burst_length_s;
+
   wire [31:0]           adc_config_ctrl_s;
   wire                  adc_ctrl_status_s;
   wire                  m_axis_ready_s;
@@ -174,6 +205,7 @@ module axi_ad7606x #(
   assign adc_clk = s_axi_aclk;
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
+  assign up_rst = ~s_axi_aresetn;
   assign adc_reset = adc_reset_s;
 
   assign adc_enable_0 = adc_enable[0];
@@ -184,8 +216,16 @@ module axi_ad7606x #(
   assign adc_enable_5 = adc_enable[5];
   assign adc_enable_6 = adc_enable[6];
   assign adc_enable_7 = adc_enable[7];
+  assign adc_enable_8 = adc_enable[8];
+  assign adc_enable_9 = adc_enable[9];
+  assign adc_enable_10 = adc_enable[10];
+  assign adc_enable_11 = adc_enable[11];
+  assign adc_enable_12 = adc_enable[12];
+  assign adc_enable_13 = adc_enable[13];
+  assign adc_enable_14 = adc_enable[14];
+  assign adc_enable_15 = adc_enable[15];
 
-  // processor read interface
+  // processor read interface // see axi_ad7616_control
 
   integer j;
 
@@ -193,7 +233,7 @@ module axi_ad7606x #(
     up_rdata_r = 'h00;
     up_rack_r = 'h00;
     up_wack_r = 'h00;
-    for (j = 0; j <= 8; j=j+1) begin
+    for (j = 0; j <= 16; j=j+1) begin // ??? <= 16 ?????
       up_rack_r = up_rack_r | up_rack_s[j];
       up_wack_r = up_wack_r | up_wack_s[j];
       up_rdata_r = up_rdata_r | up_rdata_s[j];
@@ -214,7 +254,7 @@ module axi_ad7606x #(
 
   generate
     genvar i;
-    for (i = 0; i < 8; i = i + 1) begin
+    for (i = 0; i < 16; i = i + 1) begin
       up_adc_channel #(
         .CHANNEL_ID(i)
       ) i_up_adc_channel (
@@ -270,16 +310,16 @@ module axi_ad7606x #(
 
   genvar k;
   generate
-    for (k = 0;k < 8;k = k + 1) begin
+    for (k = 0;k < 16;k = k + 1) begin
       ad_datafmt #(
-        .DATA_WIDTH (ADC_N_BITS),
-        .BITS_PER_SAMPLE (ADC_TO_DMA_N_BITS)
+        .DATA_WIDTH (16),
+        .BITS_PER_SAMPLE (16)
       ) i_datafmt (
         .clk (up_clk),
         .valid (1'b1),
-        .data (adc_data_s[k*ADC_N_BITS+(ADC_N_BITS-1):k*ADC_N_BITS]),
+        .data (adc_data_s[k*16+15:k*16]),
         .valid_out (dma_dvalid),
-        .data_out (dma_data[k*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):k*ADC_TO_DMA_N_BITS]),
+        .data_out (dma_data[k*16+15:k*16]),
         .dfmt_enable (adc_dfmt_enable_s[k]),
         .dfmt_type (adc_dfmt_type_s[k]),
         .dfmt_se (adc_dfmt_se_s[k]));
@@ -370,15 +410,25 @@ module axi_ad7606x #(
     end
   endgenerate
 
-  assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s};
-  assign adc_data_7 = dma_data[0*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):0*ADC_TO_DMA_N_BITS];
-  assign adc_data_6 = dma_data[1*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):1*ADC_TO_DMA_N_BITS];
-  assign adc_data_5 = dma_data[2*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):2*ADC_TO_DMA_N_BITS];
-  assign adc_data_4 = dma_data[3*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):3*ADC_TO_DMA_N_BITS];
-  assign adc_data_3 = dma_data[4*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):4*ADC_TO_DMA_N_BITS];
-  assign adc_data_2 = dma_data[5*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):5*ADC_TO_DMA_N_BITS];
-  assign adc_data_1 = dma_data[6*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):6*ADC_TO_DMA_N_BITS];
-  assign adc_data_0 = dma_data[7*ADC_TO_DMA_N_BITS+(ADC_TO_DMA_N_BITS-1):7*ADC_TO_DMA_N_BITS];
+  assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s,adc_data_8_s,adc_data_9_s, \
+                       adc_data_10_s,adc_data_11_s,adc_data_12_s,adc_data_13_s,adc_data_14_s,adc_data_15_s};
+
+  assign adc_data_15 = dma_data[0*16+15:0*16];
+  assign adc_data_14 = dma_data[1*16+15:1*16];
+  assign adc_data_13 = dma_data[2*16+15:2*16];
+  assign adc_data_12 = dma_data[3*16+15:3*16];
+  assign adc_data_11 = dma_data[4*16+15:4*16];
+  assign adc_data_10 = dma_data[5*16+15:5*16];
+  assign adc_data_9 = dma_data[6*16+15:6*16];
+  assign adc_data_8 = dma_data[7*16+15:7*16];
+  assign adc_data_7 = dma_data[8*16+15:8*16];
+  assign adc_data_6 = dma_data[9*16+15:9*16];
+  assign adc_data_5 = dma_data[10*16+15:10*16];
+  assign adc_data_4 = dma_data[11*16+15:11*16];
+  assign adc_data_3 = dma_data[12*16+15:12*16];
+  assign adc_data_2 = dma_data[13*16+15:13*16];
+  assign adc_data_1 = dma_data[14*16+15:14*16];
+  assign adc_data_0 = dma_data[15*16+15:15*16];
 
   up_adc_common #(
     .ID (ID),
@@ -432,11 +482,11 @@ module axi_ad7606x #(
     .up_wreq (up_wreq_s),
     .up_waddr (up_waddr_s),
     .up_wdata (up_wdata_s),
-    .up_wack (up_wack_s[8]),
+    .up_wack (up_wack_s[16]),
     .up_rreq (up_rreq_s),
     .up_raddr (up_raddr_s),
-    .up_rdata (up_rdata_s[8]),
-    .up_rack (up_rack_s[8]));
+    .up_rdata (up_rdata_s[16]),
+    .up_rack (up_rack_s[16]));
 
   // up bus interface
 
