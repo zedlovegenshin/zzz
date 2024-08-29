@@ -151,12 +151,7 @@ module axi_ad7606x #(
   wire [15:0] adc_data_15_s;
 
   wire [127:0] adc_data_s;
-  wire [ 15:0]          adc_status_header[0:15];
-  wire                  adc_status;
-  //wire [15:0]           adc_crc;
-  //wire [15:0]           adc_crc_res;
-  //wire                  adc_crc_err;
-  wire                  adc_mode_en;
+
   wire [ 7:0]           adc_custom_control;
 
   wire                  adc_dfmt_enable_s[0:15];
@@ -225,7 +220,7 @@ module axi_ad7606x #(
   assign adc_enable_14 = adc_enable[14];
   assign adc_enable_15 = adc_enable[15];
 
-  // processor read interface // see axi_ad7616_control
+  // processor read interface
 
   integer j;
 
@@ -276,8 +271,8 @@ module axi_ad7606x #(
         .adc_pn_oos (1'b0),
         .adc_or (1'b0),
         .adc_read_data (rd_data_s),
-        .adc_status_header(adc_status_header[i]),
-        .adc_crc_err(adc_crc_err),
+        .adc_status_header(),
+        .adc_crc_err(),
         .up_adc_pn_err (),
         .up_adc_pn_oos (),
         .up_adc_or (),
@@ -430,6 +425,12 @@ module axi_ad7606x #(
   assign adc_data_1 = dma_data[14*16+15:14*16];
   assign adc_data_0 = dma_data[15*16+15:15*16];
 
+  wire [31:0] adc_config_ctrl;
+  assign wr_req_s = adc_config_ctrl[0];
+  assign rd_req_s = adc_config_ctrl[1];
+
+  assign burst_length_s = adc_custom_control[4:0];
+
   up_adc_common #(
     .ID (ID),
     .CONFIG (RD_RAW_CAP)
@@ -440,7 +441,7 @@ module axi_ad7606x #(
     .adc_r1_mode (),
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
-    .adc_status (adc_status),
+    .adc_status (),
     .adc_sync_status (1'b1),
     .adc_status_ovf (adc_dovf),
     .adc_clk_ratio (),
@@ -452,7 +453,7 @@ module axi_ad7606x #(
     .adc_ext_sync_manual_req (),
     .adc_num_lanes (),
     .adc_custom_control (adc_custom_control),
-    .adc_crc_enable (adc_mode_en),
+    .adc_crc_enable (),
     .adc_sdr_ddr_n (),
     .adc_symb_op (),
     .adc_symb_8_16b (),
@@ -471,7 +472,7 @@ module axi_ad7606x #(
     .up_drp_ready (),
     .up_drp_locked (1'b1),
     .adc_config_wr (wr_data_s),
-    .adc_config_ctrl (adc_config_ctrl_s),
+    .adc_config_ctrl (adc_config_ctrl),
     .adc_config_rd ({16'd0, rd_data_s}),
     .adc_ctrl_status (adc_ctrl_status_s),
     .up_adc_gpio_in (),
