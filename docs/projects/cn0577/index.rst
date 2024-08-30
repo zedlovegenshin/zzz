@@ -9,7 +9,7 @@ Overview
 The :adi:`CN0577` provides an analog front-end and an FMC
 digital interface for :adi:`LTC2387-18`, its core. It is a low noise, high
 speed successive approximation register (SAR) ADC with a resolution of 18 bits
-and sampling rate up to 15MSPS.
+and sampling rate up to 15 MSPS.
 
 :adi:`CN0577` includes an on-board reference oscillator and a
 retiming circuit to minimize signal-to-noise ratio (SNR) degradation due to the
@@ -23,23 +23,27 @@ application, through setting a parameter.
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`CN0577`
+- :adi:`CN0577`
+- :adi:`EVAL-ADAQ23878`
 
 Supported devices
 -------------------------------------------------------------------------------
 
--  :adi:`ADAQ23876`
--  :adi:`LTC2387-18`
+- :adi:`LTC2387-18` 18-bit 15 MSPS
+- :adi:`LTC2386-18` 18-bit 10 MSPS
+- :adi:`LTC2385-18` 18-bit 5 MSPS
+- :adi:`ADAQ23878` 18-bit 15 MSPS
 
 Supported carriers
 -------------------------------------------------------------------------------
 
--  :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
+- :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>` on FMC slot
 
 Block design
 -------------------------------------------------------------------------------
 
-.. warning::
+.. caution::
+
     The VADJ for the Zedboard must be set to 2.5V.
 
 Block diagram
@@ -55,10 +59,10 @@ The data path and clock domains are depicted in the below diagram:
 Configuration modes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- - TWOLANES: specifies the number of lanes used
+- TWOLANES: specifies the number of lanes used
 
-    - 1 - two-lane output mode (default)
-    - 0 - one-lane output mode
+  - 1 - two-lane output mode (default)
+  - 0 - one-lane output mode
 
 Jumper setup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,31 +72,35 @@ the device can act in different modes, as described below. Of course, the PD
 jumper overrides the PD signal from the FPGA. It is controlled by a
 one-bit-adc-dac, in software.
 
-  - P1 - configures PD_N
+- P1 - configures PD_N
 
-    - Shorting pins 1 and 2 → PD_N = 1, device is not powered down
-    - Shorting pins 2 and 3 → PD_N = 0, device is powered down
-  
-  - P2 - configures TESTPAT
+  - Shorting pins 1 and 2 → PD_N = 1, device is not powered down
+  - Shorting pins 2 and 3 → PD_N = 0, device is powered down
 
-    - Shorting pins 1 and 2 → TESTPAT = 1, pattern testing is active
-    - Shorting pins 2 and 3 → TESTPAT = 0, pattern testing is inactive
+- P2 - configures TESTPAT
 
-  - P3 - configures TWOLANES parameter
+  - Shorting pins 1 and 2 → TESTPAT = 1, pattern testing is active
+  - Shorting pins 2 and 3 → TESTPAT = 0, pattern testing is inactive
 
-    - Shorting pins 1 and 2 → TWOLANES = 1 (TWO LANES mode)
-    - Shorting pins 2 and 3 → TWOLANES = 0 (ONE LANE mode)
+- P3 - configures TWOLANES
+
+  - Shorting pins 1 and 2 → TWOLANES = 1 (two-lane mode)
+  - Shorting pins 2 and 3 → TWOLANES = 0 (one-lane mode)
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  The clock architecture of the :adi:`CN0577` is designed
-   with careful consideration to ensure low jitter and low phase noise
--  An on-board 120 MHz voltage controlled crystal oscillator (VCXO) is used to
-   provide the clock for the :adi:`CN0577` board and the FPGA.
-   It is further named as reference clock. This clock is gated and fed back to
-   the device as the sampling clock, on which the data was sampled
--  The DMA runs on the ZynqPS clock FCLK_CLK0 which has a frequency of 100MHz
+- The clock architecture of the :adi:`CN0577` is designed
+  with careful consideration to ensure low jitter and low phase noise
+- An on-board 120 MHz voltage controlled crystal oscillator (VCXO) is used to
+  provide the clock for the :adi:`CN0577` board and the FPGA.
+  It is further named as reference clock. This clock is gated and fed back to
+  the device as the sampling clock, on which the data was sampled
+- The DMA runs on the ZynqPS clock FCLK_CLK0 which has a frequency of 100MHz
+- The LVDS input clock `ref_clk` is used to clock the
+  :git-hdl:`library/axi_pwm_gen` (on `ext_clk` port),
+  the :git-hdl:`library/axi_ltc2387` and the FIFO writes from
+  the :git-hdl:`DMA <library/axi_dmac>`
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,13 +108,13 @@ CPU/Memory interconnects addresses
 The addresses are dependent on the architecture of the FPGA, having an offset
 added to the base address from HDL (see more at :ref:`architecture`).
 
-==================== ===============
-Instance             Zynq/Microblaze
-==================== ===============
-axi_ltc2387          0x44A0_0000
-axi_ltc2387_dma      0x44A3_0000
-axi_pwm_gen          0x44A6_0000
-==================== ===============
+=============== ===============
+Instance        Zynq/Microblaze
+=============== ===============
+axi_ltc2387     0x44A0_0000
+axi_ltc2387_dma 0x44A3_0000
+axi_pwm_gen     0x44A6_0000
+=============== ===============
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -141,11 +149,11 @@ Interrupts
 
 Below are the Programmable Logic interrupts used in this project.
 
-================ === ========== ===========
-Instance name    HDL Linux Zynq Actual Zynq
-================ === ========== ===========
-axi_ltc2387_dma  13  57         89
-================ === ========== ===========
+=============== === ========== ===========
+Instance name   HDL Linux Zynq Actual Zynq
+=============== === ========== ===========
+axi_ltc2387_dma 13  57         89
+=============== === ========== ===========
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -183,22 +191,24 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] EVAL-CN0577-FMCZ User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0577>`
--  :dokuwiki:`[Wiki] CN0577 HDL Reference Design <resources/eval/user-guides/circuits-from-the-lab/cn0577/hdl>`
+- :dokuwiki:`EVAL-CN0577-FMCZ User Guide <resources/eval/user-guides/circuits-from-the-lab/cn0577>`
+- :dokuwiki:`ADAQ23875 User Guide <resources/eval/user-guide/adaq23875>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`LTC2387-18`
+  - :adi:`LTC2387-18` 15 MSPS
+  - :adi:`LTC2386-18` 10 MSPS
+  - :adi:`LTC2385-18` 5 MSPS
 
 -  `Circuit Note CN0577 <https://www.analog.com/media/en/reference-design-documentation/reference-designs/cn0577.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`CN0577 HDL project source code <projects/cn0577>`
+- :git-hdl:`CN0577 HDL project source code <projects/cn0577>`
 
 .. list-table::
    :widths: 30 35 35
@@ -209,7 +219,7 @@ HDL related
      - Documentation link
    * - AXI_LTC2387
      - :git-hdl:`library/axi_ltc2387`
-     - :dokuwiki:`[Wiki] <resources/fpga/docs/axi_ltc2387>`
+     - :ref:`axi_ltc2387`
    * - AXI_CLKGEN
      - :git-hdl:`library/axi_clkgen`
      - :ref:`here <axi_clkgen>`
@@ -241,9 +251,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
--  :git-linux:`CN0577 Linux device tree <arch/arm/boot/dts/zynq-zed-adv7511-cn0577.dts>`
--  :git-linux:`LTC2387 Linux driver <drivers/iio/adc/ltc2387.c>`
+- :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
+- :git-linux:`CN0577 Linux device tree <arch/arm/boot/dts/zynq-zed-adv7511-cn0577.dts>`
+- :git-linux:`LTC2387 Linux driver <drivers/iio/adc/ltc2387.c>`
 
 .. include:: ../common/more_information.rst
 
