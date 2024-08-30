@@ -51,7 +51,23 @@ module axi_ad7616_pif #(
 
   // FIFO interface
 
-  output      [15:0]      adc_data,
+  output  reg [15:0]      adc_data_0,
+  output  reg [15:0]      adc_data_1,
+  output  reg [15:0]      adc_data_2,
+  output  reg [15:0]      adc_data_3,
+  output  reg [15:0]      adc_data_4,
+  output  reg [15:0]      adc_data_5,
+  output  reg [15:0]      adc_data_6,
+  output  reg [15:0]      adc_data_7,
+  output  reg [15:0]      adc_data_8,
+  output  reg [15:0]      adc_data_9,
+  output  reg [15:0]      adc_data_10,
+  output  reg [15:0]      adc_data_11,
+  output  reg [15:0]      adc_data_12,
+  output  reg [15:0]      adc_data_13,
+  output  reg [15:0]      adc_data_14,
+  output  reg [15:0]      adc_data_15,
+
   output                  adc_valid,
   output  reg             adc_sync,
 
@@ -96,8 +112,12 @@ module axi_ad7616_pif #(
 
   reg                             rd_valid_d = 1'h0;
 
+  reg     [ 4:0]                  channel_counter = 5'h0;
+  reg     [ 4:0]                  nr_rd_burst = 5'd16;
+
   // internal wires
 
+  wire                            rd_new_data_s;
   wire                            start_transfer_s;
   wire                            rd_valid_s;
 
@@ -138,6 +158,73 @@ module axi_ad7616_pif #(
     end
   end
 
+  //channel_counter
+  always @(posedge clk) begin
+    if (rstn == 1'b0) begin
+      channel_counter <= 5'h0;
+    end else begin
+      if (rd_new_data_s == 1'b1 && rd_conv_d== 1'b1) begin
+        channel_counter <= channel_counter + 1;
+      end else if (transfer_state == IDLE) begin
+        channel_counter <= 5'h0;
+      end
+    end
+  end
+
+  if (rd_conv_d== 1'b1 && rd_new_data_s == 1'b1) begin
+    case (channel_counter)
+      5'd0 : begin
+        adc_data_0 <= rd_data;
+      end
+      5'd1 : begin
+        adc_data_1 <= rd_data;
+      end
+      5'd2 : begin
+        adc_data_2 <= rd_data;
+      end
+      5'd3 : begin
+        adc_data_3 <= rd_data;
+      end
+      5'd4 : begin
+        adc_data_4 <= rd_data;
+      end
+      5'd5 : begin
+        adc_data_5 <= rd_data;
+      end
+      5'd6 : begin
+        adc_data_6 <= rd_data;
+      end
+      5'd7 : begin
+        adc_data_7 <= rd_data;
+      end
+      5'd8 : begin
+        adc_data_8 <= rd_data;
+      end
+      5'd9 : begin
+        adc_data_9 <= rd_data;
+      end
+      5'd10 : begin
+        adc_data_10 <= rd_data;
+      end
+      5'd11 : begin
+        adc_data_11 <= rd_data;
+      end
+      5'd12 : begin
+        adc_data_12 <= rd_data;
+      end
+      5'd13 : begin
+        adc_data_13 <= rd_data;
+      end
+      5'd14 : begin
+        adc_data_14 <= rd_data;
+      end
+      5'd15 : begin
+        adc_data_15 <= rd_data;
+      end
+
+    endcase
+  end
+
   always @(negedge clk) begin
     if (transfer_state == IDLE) begin
       wr_req_d <= wr_req;
@@ -170,7 +257,7 @@ module axi_ad7616_pif #(
         transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_HIGH : CS_HIGH;
       end
       CS_HIGH : begin
-        transfer_state_next <= (burst_length == burst_counter) ? IDLE : CNTRL0_LOW;
+        transfer_state_next <= (burst_length == burst_counter || channel_counter == nr_rd_burst) ? IDLE : CNTRL0_LOW;
       end
       default : begin
         transfer_state_next <= IDLE;
@@ -187,14 +274,16 @@ module axi_ad7616_pif #(
 
   assign db_o = wr_data;
 
+  assign rd_new_data_s = rd_valid_s & ~rd_valid_d;
+
   always @(posedge clk) begin
     rd_data <= (rd_valid_s & ~rd_valid_d) ? db_i : rd_data;
     rd_valid_d <= rd_valid_s;
     rd_valid <= rd_valid_s & ~rd_valid_d;
   end
 
-  assign adc_valid = rd_valid;
-  assign adc_data = rd_data;
+  //assign adc_valid = rd_valid;
+  adc_valid <= (channel_counter == 5'd16) ? rd_valid : 1'b0;
 
   assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
   assign db_t = ~wr_req_d;
