@@ -12,7 +12,9 @@ global VIVADO_IP_LIBRARY
 adi_ip_create axi_ad7616
 adi_ip_files axi_ad7616 [list \
     "$ad_hdl_dir/library/common/up_axi.v" \
-    "axi_ad7616_control.v" \
+    "$ad_hdl_dir/library/common/ad_datafmt.v" \
+    "$ad_hdl_dir/library/common/up_adc_channel.v" \
+    "$ad_hdl_dir/library/common/up_adc_common.v" \
     "axi_ad7616_pif.v" \
     "axi_ad7616.v" ]
 
