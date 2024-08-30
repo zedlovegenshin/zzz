@@ -266,7 +266,7 @@ module axi_ad7616 #(
         .adc_pn_err (1'b0),
         .adc_pn_oos (1'b0),
         .adc_or (1'b0),
-        .adc_read_data (rd_data_s),
+        .adc_read_data ({16'd0,rd_data_s}),
         .adc_status_header(),
         .adc_crc_err(),
         .up_adc_pn_err (),
