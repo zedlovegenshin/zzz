@@ -356,7 +356,7 @@ module axi_ad7616 #(
     end
   endgenerate
 
-  assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s,adc_data_8_s,adc_data_9_s, \
+  assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s,adc_data_8_s,adc_data_9_s,
                        adc_data_10_s,adc_data_11_s,adc_data_12_s,adc_data_13_s,adc_data_14_s,adc_data_15_s};
 
   assign adc_data_15 = dma_data[0*16+15:0*16];

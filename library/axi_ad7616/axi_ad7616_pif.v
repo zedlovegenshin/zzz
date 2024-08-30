@@ -83,7 +83,7 @@ module axi_ad7616_pif #(
   input                   rd_req,
   input                   wr_req,
   input       [15:0]      wr_data,
-  output  reg [15:0]      rd_data,
+  output  reg [15:0]      rd_data = 'hf',
   output  reg             rd_valid
 );
 
