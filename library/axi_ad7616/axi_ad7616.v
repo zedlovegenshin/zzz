@@ -79,6 +79,8 @@ module axi_ad7616 #(
 
   output        adc_valid,
   output        adc_sync,
+  output        adc_clk,
+  input         adc_dovf,
 
   output [15:0] adc_data_0,
   output [15:0] adc_data_1,
@@ -194,6 +196,7 @@ module axi_ad7616 #(
 
   // defaults
 
+  assign adc_clk = s_axi_aclk;
   assign up_clk = s_axi_aclk;
   assign up_rstn = s_axi_aresetn;
   assign up_rst = ~s_axi_aresetn;
@@ -394,7 +397,7 @@ module axi_ad7616 #(
     .adc_pin_mode (),
     .adc_status (),
     .adc_sync_status (1'b1),
-    .adc_status_ovf (),
+    .adc_status_ovf (adc_dovf),
     .adc_clk_ratio (),
     .adc_start_code (),
     .adc_sref_sync (),
