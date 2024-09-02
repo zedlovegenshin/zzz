@@ -31,5 +31,6 @@ LIB_DEPS += spi_engine/spi_engine_interconnect
 LIB_DEPS += spi_engine/spi_engine_offload
 LIB_DEPS += sysid_rom
 LIB_DEPS += util_i2c_mixer
+LIB_DEPS += util_pack/util_cpack2
 
 include ../../scripts/project-xilinx.mk
