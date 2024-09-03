@@ -78,7 +78,6 @@ module axi_ad7616 #(
   input         s_axi_rready,
 
   output        adc_valid,
-  output        adc_sync,
   output        adc_clk,
   input         adc_dovf,
 
@@ -148,7 +147,7 @@ module axi_ad7616 #(
   wire [15:0] adc_data_14_s;
   wire [15:0] adc_data_15_s;
 
-  wire [127:0] adc_data_s;
+  wire [255:0] adc_data_s;
 
   wire [ 7:0]           adc_custom_control;
 
@@ -159,7 +158,7 @@ module axi_ad7616 #(
   wire [15:0]           adc_enable;
   wire                  adc_reset_s;
 
-  wire [127:0]          dma_data;
+  wire [255:0]          dma_data;
   wire                  dma_dvalid;
 
   wire                  up_clk;
@@ -320,44 +319,41 @@ module axi_ad7616 #(
     end
   endgenerate
 
-  generate
-    begin
-      axi_ad7616_pif i_ad7616_parallel_interface (
-    .cs_n (rx_cs_n),
-    .db_o (rx_db_o),
-    .db_i (rx_db_i),
-    .db_t (rx_db_t),
-    .rd_n (rx_rd_n),
-    .wr_n (rx_wr_n),
-    .adc_data_0 (adc_data_0_s),
-    .adc_data_1 (adc_data_1_s),
-    .adc_data_2 (adc_data_2_s),
-    .adc_data_3 (adc_data_3_s),
-    .adc_data_4 (adc_data_4_s),
-    .adc_data_5 (adc_data_5_s),
-    .adc_data_6 (adc_data_6_s),
-    .adc_data_7 (adc_data_7_s),
-    .adc_data_8 (adc_data_8_s),
-    .adc_data_9 (adc_data_9_s),
-    .adc_data_10 (adc_data_10_s),
-    .adc_data_11 (adc_data_11_s),
-    .adc_data_12 (adc_data_12_s),
-    .adc_data_13 (adc_data_13_s),
-    .adc_data_14 (adc_data_14_s),
-    .adc_data_15 (adc_data_15_s),
-    .adc_valid (adc_valid),
-    .adc_sync (adc_sync),
-    .end_of_conv (rx_trigger),
-    .burst_length(burst_length_s),
-    .clk (up_clk),
-    .rstn (up_rstn),
-    .rd_req (rd_req_s),
-    .wr_req (wr_req_s),
-    .wr_data (wr_data_s),
-    .rd_data (rd_data_s),
-    .rd_valid (rd_valid_s));
-    end
-  endgenerate
+      axi_ad7616_pif #(
+        .UP_ADDRESS_WIDTH(14)
+      ) i_ad7616_parallel_interface (
+        .cs_n (rx_cs_n),
+        .db_o (rx_db_o),
+        .db_i (rx_db_i),
+        .db_t (rx_db_t),
+        .rd_n (rx_rd_n),
+        .wr_n (rx_wr_n),
+        .adc_data_0 (adc_data_0_s),
+        .adc_data_1 (adc_data_1_s),
+        .adc_data_2 (adc_data_2_s),
+        .adc_data_3 (adc_data_3_s),
+        .adc_data_4 (adc_data_4_s),
+        .adc_data_5 (adc_data_5_s),
+        .adc_data_6 (adc_data_6_s),
+        .adc_data_7 (adc_data_7_s),
+        .adc_data_8 (adc_data_8_s),
+        .adc_data_9 (adc_data_9_s),
+        .adc_data_10 (adc_data_10_s),
+        .adc_data_11 (adc_data_11_s),
+        .adc_data_12 (adc_data_12_s),
+        .adc_data_13 (adc_data_13_s),
+        .adc_data_14 (adc_data_14_s),
+        .adc_data_15 (adc_data_15_s),
+        .adc_valid (adc_valid),
+        .end_of_conv (rx_trigger),
+        .burst_length(burst_length_s),
+        .clk (up_clk),
+        .rstn (up_rstn),
+        .rd_req (rd_req_s),
+        .wr_req (wr_req_s),
+        .wr_data (wr_data_s),
+        .rd_data (rd_data_s),
+        .rd_valid (rd_valid_s));
 
   assign adc_data_s = {adc_data_0_s,adc_data_1_s,adc_data_2_s,adc_data_3_s,adc_data_4_s,adc_data_5_s,adc_data_6_s,adc_data_7_s,adc_data_8_s,adc_data_9_s,
                        adc_data_10_s,adc_data_11_s,adc_data_12_s,adc_data_13_s,adc_data_14_s,adc_data_15_s};

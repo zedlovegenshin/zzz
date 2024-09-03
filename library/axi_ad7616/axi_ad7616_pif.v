@@ -69,7 +69,6 @@ module axi_ad7616_pif #(
   output  reg [15:0]      adc_data_15,
 
   output                  adc_valid,
-  output  reg             adc_sync,
 
   // end of convertion
 
@@ -83,7 +82,7 @@ module axi_ad7616_pif #(
   input                   rd_req,
   input                   wr_req,
   input       [15:0]      wr_data,
-  output  reg [15:0]      rd_data = 'hf',
+  output  reg [15:0]      rd_data = 'hf,
   output  reg             rd_valid
 );
 
@@ -171,65 +170,58 @@ module axi_ad7616_pif #(
     end
   end
 
-  if (rd_conv_d== 1'b1 && rd_new_data_s == 1'b1) begin
-    case (channel_counter)
-      5'd0 : begin
-        adc_data_0 <= rd_data;
-      end
-      5'd1 : begin
-        adc_data_1 <= rd_data;
-      end
-      5'd2 : begin
-        adc_data_2 <= rd_data;
-      end
-      5'd3 : begin
-        adc_data_3 <= rd_data;
-      end
-      5'd4 : begin
-        adc_data_4 <= rd_data;
-      end
-      5'd5 : begin
-        adc_data_5 <= rd_data;
-      end
-      5'd6 : begin
-        adc_data_6 <= rd_data;
-      end
-      5'd7 : begin
-        adc_data_7 <= rd_data;
-      end
-      5'd8 : begin
-        adc_data_8 <= rd_data;
-      end
-      5'd9 : begin
-        adc_data_9 <= rd_data;
-      end
-      5'd10 : begin
-        adc_data_10 <= rd_data;
-      end
-      5'd11 : begin
-        adc_data_11 <= rd_data;
-      end
-      5'd12 : begin
-        adc_data_12 <= rd_data;
-      end
-      5'd13 : begin
-        adc_data_13 <= rd_data;
-      end
-      5'd14 : begin
-        adc_data_14 <= rd_data;
-      end
-      5'd15 : begin
-        adc_data_15 <= rd_data;
-      end
-
-    endcase
-  end
-
-  always @(negedge clk) begin
-    if (transfer_state == IDLE) begin
-      wr_req_d <= wr_req;
-      rd_req_d <= rd_req;
-      rd_conv_d <= end_of_conv;
+  always @(posedge clk) begin
+    if (rd_conv_d == 1'b1 && rd_new_data_s == 1'b1) begin
+      case (channel_counter)
+        5'd0 : begin
+          adc_data_0 <= rd_data;
+        end
+        5'd1 : begin
+          adc_data_1 <= rd_data;
+        end
+        5'd2 : begin
+          adc_data_2 <= rd_data;
+        end
+        5'd3 : begin
+          adc_data_3 <= rd_data;
+        end
+        5'd4 : begin
+          adc_data_4 <= rd_data;
+        end
+        5'd5 : begin
+          adc_data_5 <= rd_data;
+        end
+        5'd6 : begin
+          adc_data_6 <= rd_data;
+        end
+        5'd7 : begin
+          adc_data_7 <= rd_data;
+        end
+        5'd8 : begin
+          adc_data_8 <= rd_data;
+        end
+        5'd9 : begin
+          adc_data_9 <= rd_data;
+        end
+        5'd10 : begin
+          adc_data_10 <= rd_data;
+        end
+        5'd11 : begin
+          adc_data_11 <= rd_data;
+        end
+        5'd12 : begin
+          adc_data_12 <= rd_data;
+        end
+        5'd13 : begin
+          adc_data_13 <= rd_data;
+        end
+        5'd14 : begin
+          adc_data_14 <= rd_data;
+        end
+        5'd15 : begin
+          adc_data_15 <= rd_data;
+        end
+      endcase
     end
   end
 
@@ -283,22 +275,12 @@ module axi_ad7616_pif #(
   end
 
   //assign adc_valid = rd_valid;
-  adc_valid <= (channel_counter == 5'd16) ? rd_valid : 1'b0;
+  assign adc_valid = (channel_counter == 5'd16) ? rd_valid : 1'b0;
 
   assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
   assign db_t = ~wr_req_d;
   assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
                   (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
   assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
-
-  // sync will be asserted at the first valid data right after the convertion start
-
-  always @(posedge clk) begin
-    if (end_of_conv == 1'b1) begin
-      adc_sync <= 1'b1;
-    end else if (rd_valid == 1'b1) begin
-      adc_sync <= 1'b0;
-    end
-  end
 
 endmodule
