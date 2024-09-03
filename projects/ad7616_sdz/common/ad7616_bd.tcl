@@ -122,7 +122,7 @@ if {$SER_PAR_N == 1} {
   create_bd_port -dir O rx_wr_n
   create_bd_port -dir O rx_cs_n
 
-  ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_SRC 16
+  ad_ip_parameter axi_ad7616_dma CONFIG.DMA_DATA_WIDTH_SRC 256
   ad_ip_parameter axi_ad7616_dma CONFIG.DMA_TYPE_SRC 2
   ad_ip_parameter axi_ad7616_dma CONFIG.SYNC_TRANSFER_START 1
 
@@ -143,12 +143,6 @@ if {$SER_PAR_N == 1} {
   ad_connect  rx_wr_n axi_ad7616/rx_wr_n
   ad_connect  rx_cs_n axi_ad7616/rx_cs_n
 
-  #ad_connect  $sys_cpu_clk axi_ad7616_dma/fifo_wr_clk
-  #ad_connect  axi_ad7616/adc_valid axi_ad7616_dma/fifo_wr_en
-  #ad_connect  axi_ad7616/adc_data axi_ad7616_dma/fifo_wr_din
-  #ad_connect  axi_ad7616/adc_sync axi_ad7616_dma/fifo_wr_sync
-
-  ad_connect  axi_ad7616/adc_sync axi_ad7616_dma/sync
   ad_connect  axi_ad7616/adc_clk axi_ad7616_dma/fifo_wr_clk
 
   ad_connect  axi_ad7616/adc_clk ad7616_adc_pack/clk
