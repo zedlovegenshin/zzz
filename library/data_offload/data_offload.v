@@ -81,9 +81,9 @@ module data_offload #(
   input                                       s_axis_aclk,
   input                                       s_axis_aresetn,
 
-  output                                      s_axis_ready,
-  input                                       s_axis_valid,
-  input  [SRC_DATA_WIDTH-1:0]                 s_axis_data,
+  (* MARK_DEBUG = "TRUE" *) output                                      s_axis_ready,
+  (* MARK_DEBUG = "TRUE" *) input                                       s_axis_valid,
+  (* MARK_DEBUG = "TRUE" *) input  [SRC_DATA_WIDTH-1:0]                 s_axis_data,
   input                                       s_axis_last,
   input  [SRC_DATA_WIDTH/8-1:0]               s_axis_tkeep,
 
@@ -93,11 +93,11 @@ module data_offload #(
   input                                       m_axis_aclk,
   input                                       m_axis_aresetn,
 
-  input                                       m_axis_ready,
-  output                                      m_axis_valid,
-  output  [DST_DATA_WIDTH-1:0]                m_axis_data,
-  output                                      m_axis_last,
-  output  [DST_DATA_WIDTH/8-1:0]              m_axis_tkeep,
+ (* MARK_DEBUG = "TRUE" *) input                                       m_axis_ready,
+ (* MARK_DEBUG = "TRUE" *) output                                      m_axis_valid,
+ (* MARK_DEBUG = "TRUE" *) output  [DST_DATA_WIDTH-1:0]                m_axis_data,
+ (* MARK_DEBUG = "TRUE" *) output                                      m_axis_last,
+ (* MARK_DEBUG = "TRUE" *) output  [DST_DATA_WIDTH/8-1:0]              m_axis_tkeep,
 
   // initialization request interface
 
@@ -190,9 +190,21 @@ module data_offload #(
   wire                                        rd_ready;
   wire                                        rd_ml_ready;
   wire                                        wr_ready;
+  (* MARK_DEBUG = "TRUE" *) wire                                        dst_clk_sync_ext;
 
   assign src_clk = s_axis_aclk;
   assign dst_clk = m_axis_aclk;
+
+
+  sync_bits #(
+    .NUM_OF_BITS (1),
+    .ASYNC_CLK(1)
+  ) ila_sync_clk (
+    .in_bits(sync_ext),
+    .out_clk(dst_clk),
+    .out_resetn(1'b1),
+    .out_bits(dst_clk_sync_ext));
+
 
   // internal registers
 

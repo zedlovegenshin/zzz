@@ -66,10 +66,10 @@ module ad_ip_jesd204_tpl_adc #(
 
   // dma interface
 
-  output [NUM_CHANNELS-1:0] enable,
+  (* MARK_DEBUG = "TRUE" *) output [NUM_CHANNELS-1:0] enable,
 
-  output [NUM_CHANNELS-1:0] adc_valid,
-  output [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] adc_data,
+  (* MARK_DEBUG = "TRUE" *) output [NUM_CHANNELS-1:0] adc_valid,
+  (* MARK_DEBUG = "TRUE" *) output [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] adc_data,
   input adc_dovf,
 
   input adc_sync_in,

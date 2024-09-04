@@ -119,10 +119,10 @@ module axi_dmac #(
   output [DMA_AXI_PROTOCOL_DEST:0]         m_dest_axi_awlock,
 
   // Write data
-  output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
-  output [(DMA_DATA_WIDTH_DEST/8)-1:0]     m_dest_axi_wstrb,
-  input                                    m_dest_axi_wready,
-  output                                   m_dest_axi_wvalid,
+ (* MARK_DEBUG = "TRUE" *) output [DMA_DATA_WIDTH_DEST-1:0]         m_dest_axi_wdata,
+ (* MARK_DEBUG = "TRUE" *) output [(DMA_DATA_WIDTH_DEST/8)-1:0]     m_dest_axi_wstrb,
+ (* MARK_DEBUG = "TRUE" *) input                                    m_dest_axi_wready,
+ (* MARK_DEBUG = "TRUE" *) output                                   m_dest_axi_wvalid,
   output                                   m_dest_axi_wlast,
   output [AXI_ID_WIDTH_DEST-1:0]           m_dest_axi_wid,
 
@@ -167,9 +167,9 @@ module axi_dmac #(
   output [DMA_AXI_PROTOCOL_SRC:0]          m_src_axi_arlock,
 
   // Read data and response
-  input  [DMA_DATA_WIDTH_SRC-1:0]          m_src_axi_rdata,
-  output                                   m_src_axi_rready,
-  input                                    m_src_axi_rvalid,
+  (* MARK_DEBUG = "TRUE" *) input  [DMA_DATA_WIDTH_SRC-1:0]          m_src_axi_rdata,
+  (* MARK_DEBUG = "TRUE" *) output                                   m_src_axi_rready,
+  (* MARK_DEBUG = "TRUE" *) input                                    m_src_axi_rvalid,
   input  [ 1:0]                            m_src_axi_rresp,
   input  [AXI_ID_WIDTH_SRC-1:0]            m_src_axi_rid,
   input                                    m_src_axi_rlast,
@@ -244,22 +244,22 @@ module axi_dmac #(
 
   // Slave streaming AXI interface
   input                                    s_axis_aclk,
-  output                                   s_axis_ready,
-  input                                    s_axis_valid,
-  input  [DMA_DATA_WIDTH_SRC-1:0]          s_axis_data,
+  (* MARK_DEBUG = "TRUE" *) output                                   s_axis_ready,
+  (* MARK_DEBUG = "TRUE" *) input                                    s_axis_valid,
+  (* MARK_DEBUG = "TRUE" *) input  [DMA_DATA_WIDTH_SRC-1:0]          s_axis_data,
   input  [DMA_DATA_WIDTH_SRC/8-1:0]        s_axis_strb,
   input  [DMA_DATA_WIDTH_SRC/8-1:0]        s_axis_keep,
   input  [0:0]                             s_axis_user,
   input  [DMA_AXIS_ID_W-1:0]               s_axis_id,
   input  [DMA_AXIS_DEST_W-1:0]             s_axis_dest,
   input                                    s_axis_last,
-  output                                   s_axis_xfer_req,
+  (* MARK_DEBUG = "TRUE" *) output                                   s_axis_xfer_req,
 
   // Master streaming AXI interface
   input                                    m_axis_aclk,
-  input                                    m_axis_ready,
-  output                                   m_axis_valid,
-  output [DMA_DATA_WIDTH_DEST-1:0]         m_axis_data,
+  (* MARK_DEBUG = "TRUE" *) input                                    m_axis_ready,
+  (* MARK_DEBUG = "TRUE" *) output                                   m_axis_valid,
+  (* MARK_DEBUG = "TRUE" *) output [DMA_DATA_WIDTH_DEST-1:0]         m_axis_data,
   output [DMA_DATA_WIDTH_DEST/8-1:0]       m_axis_strb,
   output [DMA_DATA_WIDTH_DEST/8-1:0]       m_axis_keep,
   output [0:0]                             m_axis_user,

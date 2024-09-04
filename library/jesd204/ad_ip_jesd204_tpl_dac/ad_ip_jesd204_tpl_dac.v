@@ -68,10 +68,10 @@ module ad_ip_jesd204_tpl_dac #(
   output [NUM_LANES*8*OCTETS_PER_BEAT-1:0] link_data,
 
   // dma interface
-  output [NUM_CHANNELS-1:0] enable,
+  (* MARK_DEBUG = "TRUE" *) output [NUM_CHANNELS-1:0] enable,
 
-  output [NUM_CHANNELS-1:0] dac_valid,
-  input [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] dac_ddata,
+  (* MARK_DEBUG = "TRUE" *) output [NUM_CHANNELS-1:0] dac_valid,
+  (* MARK_DEBUG = "TRUE" *) input [DMA_BITS_PER_SAMPLE * OCTETS_PER_BEAT * 8 * NUM_LANES / BITS_PER_SAMPLE-1:0] dac_ddata,
   input dac_dunf,
 
   output dac_rst,

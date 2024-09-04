@@ -52,7 +52,7 @@ module axi_tdd_channel #(
   input  logic [REGISTER_WIDTH-1:0] asy_t_high,
   input  logic [REGISTER_WIDTH-1:0] asy_t_low,
 
-  output logic                      out
+  (* MARK_DEBUG = "TRUE" *) output logic                      out
 );
 
   // package import
