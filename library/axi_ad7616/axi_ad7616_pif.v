@@ -157,14 +157,23 @@ module axi_ad7616_pif #(
     end
   end
 
+  always @(negedge clk) begin
+    if (transfer_state == IDLE) begin
+      wr_req_d <= wr_req;
+      rd_req_d <= rd_req;
+      rd_conv_d <= end_of_conv;
+    end
+  end
+
   //channel_counter
+
   always @(posedge clk) begin
     if (rstn == 1'b0) begin
       channel_counter <= 5'h0;
     end else begin
-      if (rd_new_data_s == 1'b1 && rd_conv_d== 1'b1) begin
+      if (rd_new_data_s == 1'b1 && rd_conv_d == 1'b1) begin
         channel_counter <= channel_counter + 1;
-      end else if (transfer_state == IDLE) begin
+      end else if (channel_counter == nr_rd_burst) begin
         channel_counter <= 5'h0;
       end
     end

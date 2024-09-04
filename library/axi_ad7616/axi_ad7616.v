@@ -181,7 +181,7 @@ module axi_ad7616 #(
 
   wire                  rd_req_s;
   wire                  wr_req_s;
-  wire [15:0]           wr_data_s;
+  wire [31:0]           wr_data_s;
   wire [15:0]           rd_data_s;
   wire                  rd_valid_s;
   wire [ 4:0]           burst_length_s;
@@ -351,7 +351,7 @@ module axi_ad7616 #(
         .rstn (up_rstn),
         .rd_req (rd_req_s),
         .wr_req (wr_req_s),
-        .wr_data (wr_data_s),
+        .wr_data (wr_data_s[15:0]),
         .rd_data (rd_data_s),
         .rd_valid (rd_valid_s));
 
