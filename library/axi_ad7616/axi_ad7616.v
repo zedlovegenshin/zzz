@@ -424,7 +424,7 @@ module axi_ad7616 #(
     .adc_config_wr (wr_data_s),
     .adc_config_ctrl (adc_config_ctrl),
     .adc_config_rd ({16'd0, rd_data_s}),
-    .adc_ctrl_status (adc_ctrl_status_s),
+    .adc_ctrl_status (1'b1),
     .up_adc_gpio_in (),
     .up_adc_gpio_out (),
     .up_adc_ce (),
