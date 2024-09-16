@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    sodipodi:docname="ad7405_zed_single_block_diagram.svg"
-   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,11 +25,11 @@
      showgrid="false"
      inkscape:zoom="2.0938813"
      inkscape:cx="325.47213"
-     inkscape:cy="373.46912"
+     inkscape:cy="488.32759"
      inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:window-height="990"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -1245,6 +1245,6 @@
          id="tspan41770-8"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.64583px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583"
          x="70.483963"
-         y="165.88783">ADC clock=25MHz</tspan></text>
+         y="165.88783">ADC clock=20MHz</tspan></text>
   </g>
 </svg>
