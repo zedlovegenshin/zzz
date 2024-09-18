@@ -48,7 +48,7 @@ ad_ip_parameter axi_clkgen CONFIG.VCO_DIV 1
 ad_ip_parameter axi_clkgen CONFIG.VCO_MUL 8
 ad_ip_parameter axi_clkgen CONFIG.CLK0_DIV 6
 
-ad_connect axi_clkgen/clk   sys_ps7/FCLK_CLK0
+ad_connect $sys_cpu_clk axi_clkgen/clk
 ad_connect axi_clkgen/clk_0 axi_ad3542r_dac/dac_clk
 ad_connect axi_clkgen/clk_0 axi_dac_dma/m_axis_aclk
 

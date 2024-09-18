@@ -118,7 +118,8 @@ module axi_ad3542r #(
   wire    [ 7:0]    address;
   wire    [23:0]    data_read;
   wire    [23:0]    data_write;
-  wire              ddr_sdr_n;
+  wire    [ 1:0]    multi_io_mode;
+  wire              sdr_ddr_n;
   wire              symb_8_16b;
   wire              transfer_data;
   wire              stream;
@@ -143,6 +144,7 @@ module axi_ad3542r #(
     .address(address),
     .data_read(data_read),
     .data_write(data_write),
+    .multi_io_mode(multi_io_mode),
     .sdr_ddr_n(sdr_ddr_n),
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),
@@ -183,6 +185,7 @@ module axi_ad3542r #(
     .address(address),
     .data_read(data_read),
     .data_write(data_write),
+    .multi_io_mode(multi_io_mode),
     .sdr_ddr_n(sdr_ddr_n),
     .symb_8_16b(symb_8_16b),
     .transfer_data(transfer_data),

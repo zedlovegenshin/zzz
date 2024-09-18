@@ -67,6 +67,7 @@ module axi_ad3542r_core #(
   input                   if_busy,
   input        [23:0]     data_read,
   output       [23:0]     data_write,
+  output       [ 1:0]     multi_io_mode,
   output                  sdr_ddr_n,
   output                  symb_8_16b,
   output                  transfer_data,
@@ -118,6 +119,7 @@ module axi_ad3542r_core #(
   assign data_write    = dac_data_control[23:0];
   assign transfer_data = dac_control[0];
   assign stream        = dac_control[1];
+  assign multi_io_mode = dac_control[3:2];
   assign address       = dac_control[31:24];
 
   // processor read interface

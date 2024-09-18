@@ -46,6 +46,7 @@ module axi_ad3542r_if (
 
   input       [ 7:0]      address,
   input       [23:0]      data_write,
+  input       [ 1:0]      multi_io_mode,
   input                   sdr_ddr_n,
   input                   symb_8_16b,
   input                   transfer_data,
@@ -278,10 +279,11 @@ module axi_ad3542r_if (
       end else  begin
         counter  <= counter + 1;
         wa_cp    <= (counter == 16'he);
-        tf_cp[0] <= (counter == 16'h7);
-        tf_cp[1] <= (counter == 16'hf);
-        tf_cp[2] <= (counter == 16'h3);
-        tf_cp[3] <= (counter == 16'h7);
+        //multi_io_mode == 0 is single SPI
+        tf_cp[0] <= (~(|multi_io_mode)) ? (counter == 16'hf) : (counter == 16'h7);
+        tf_cp[1] <= (~(|multi_io_mode)) ? (counter == 16'h1f): (counter == 16'hf);
+        tf_cp[2] <= (~(|multi_io_mode)) ? (counter == 16'h7) : (counter == 16'h3);
+        tf_cp[3] <= (~(|multi_io_mode)) ? (counter == 16'hf) : (counter == 16'h7);
         st_cp[0] <= (counter == 16'h1e);
         st_cp[1] <= (counter == 16'he);
         st_cp[2] <= (counter == 16'h1f);
@@ -332,7 +334,7 @@ module axi_ad3542r_if (
     end else if ((transfer_state == STREAM & cycle_done) || (transfer_state != STREAM  && transfer_state_next == STREAM)) begin
       transfer_reg <= {dac_data_int, 24'h0};
     end else if (transfer_step && transfer_state != CS_HIGH) begin
-      transfer_reg <= (transfer_state == WRITE_ADDRESS) ? {transfer_reg[54:0], sdio_i[0]} : {transfer_reg[53:0], sdio_i};//analisar hardware, provavelmente replicar dados
+      transfer_reg <= (transfer_state == WRITE_ADDRESS || ~(|multi_io_mode)) ? {transfer_reg[54:0], sdio_i[0]} : {transfer_reg[53:0], sdio_i};//analisar hardware, provavelmente replicar dados
     end
 
     if (transfer_state == CS_HIGH) begin
@@ -355,6 +357,6 @@ module axi_ad3542r_if (
   // in TRANSFER register mode
 
   assign sdio_t = (data_r_wn & transfer_state == TRANSFER_REGISTER);
-  assign sdio_o = (transfer_state == WRITE_ADDRESS) ? {1'b0, transfer_reg[55]} : transfer_reg[55:54]; //separar tristate
+  assign sdio_o = (transfer_state == WRITE_ADDRESS || ~(|multi_io_mode)) ? {1'b0, transfer_reg[55]} : transfer_reg[55:54]; //separar tristate
 
 endmodule

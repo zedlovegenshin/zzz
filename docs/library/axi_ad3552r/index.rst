@@ -111,6 +111,8 @@ Interface
      - Serial data in from the DAC.
    * - sdio_t
      - I/O buffer control signal.
+   * - qspi_sel
+     -  QSPI Mode Enable. High level enables quad SPI interface mode.
    * - s_axi
      - Standard AXI Slave Memory Map interface.
 
