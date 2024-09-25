@@ -133,7 +133,7 @@ module axi_ad35xxr #(
 
   assign up_clk   = s_axi_aclk;
   assign up_rstn  = s_axi_aresetn;
-  assign qspi = (multi_io_mode == 2'd2); //2'd2 is quad spi in multi_io_mode reg
+  assign qspi_sel = (multi_io_mode == 2'd2); //2'd2 is quad spi in multi_io_mode reg
 
   // device interface
   axi_ad35xxr_if axi_ad35xxr_interface (
