@@ -108,6 +108,52 @@ module, is used in this way: bit 1 - RD request to the device register map('b1),
 bit 0 - WR request to the device register map('b1). Also, **adc_custom_control**
 signal, that is available in the *up_adc_common* module, controls burst_length.
 
+
+Software Parallel Mode Channel Conversion Setting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. wavedrom::
+
+   {signal: [
+     {name: 'RESET_N', wave:'101................'},
+     {name: 'CNVST', wave:'0....10..........1.'},
+     {name: 'BUSY', wave:'0....1.0.........1.'},
+     {name: 'CS_N', wave:'1.....01..........010101..............', "period" :0.5},
+     {name: 'WR_N', wave:'1.....01..............01..............', "period" :0.5},
+     {name: 'RD_N', wave:'1.................0101................', "period" :0.5},
+     {name: 'DB[0:15]', wave:'z.....=.z.........=.=.=.z.........|.....', data: ['CHx',"A0","B0","CHy"], "period" :0.45}
+   ],
+   foot: {text:
+  ['tspan', 'CHx CONVERSION START']
+      }
+   }
+
+
+Parallel Read Timing Diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. wavedrom::
+
+    {signal: [
+     {name: 'CNVST', wave:'010..........10....'},
+     {name: 'BUSY', wave:'0..1......0................1......0...', "period" :0.5},
+     {name: 'CS_N', wave:'1..........0..1..0..1..............0..', "period" :0.5},
+     {name: 'RD_N', wave:'1......................01........01................................01.', "period" :0.25},
+     {name: 'DB[0:15]', wave:'z.....=.z=.z.......', data: ['CONVA',"CONVB","B0","CHy"], "period" :1,"phase":-0.1}
+   ]
+ }
+
+Parallel Write Timing Diagram
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. wavedrom::
+
+     {signal: [
+     {name: 'CNVST', wave:'0..........................1..0', "period" :0.5},
+     {name: 'CS_N', wave:'1......0.....1.....0.....1.....', "period" :0.5},
+     {name: 'WR_N', wave:'1......0...1.......0...1......', "period" :0.5,"phase":-0.5},
+     {name: 'DB[0:15]', wave:'z..=.z.=.z.', data: ['WRITE REG 1',"WRITE REG 2","B0","CHy"], "period" :1.3,"phase":0.7}
+   ]
+ }
+
+
 Software Support
 --------------------------------------------------------------------------------
 
