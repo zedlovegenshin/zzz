@@ -166,8 +166,14 @@ create_bd_port -dir O tdd_tx_stingray_en
 
 set tdd_sync_in_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins axi_tdd_0/sync_in]]]
 set tdd_sync_in_pin [get_bd_pins axi_tdd_0/sync_in]
+
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.SYNC_TRANSFER_START 1
+ad_ip_parameter axi_mxfe_rx_dma CONFIG.AXIS_TUSER_SYNC 0
+
 ad_disconnect $tdd_sync_in_net $tdd_sync_in_pin
+
 ad_connect axi_tdd_0/sync_in tdd_sync
+ad_connect axi_tdd_0/tdd_channel_1 axi_mxfe_rx_dma/sync
 ad_connect axi_tdd_0/tdd_channel_2 tdd_enabled
 ad_connect axi_tdd_0/tdd_channel_3 tdd_rx_mxfe_en
 ad_connect axi_tdd_0/tdd_channel_4 tdd_tx_mxfe_en

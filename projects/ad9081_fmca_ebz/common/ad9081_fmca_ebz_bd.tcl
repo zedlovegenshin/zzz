@@ -306,7 +306,7 @@ if {$INTF_CFG != "TX"} {
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.AXI_SLICE_SRC 1
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.AXI_SLICE_DEST 1
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.SYNC_TRANSFER_START 0
-  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_LENGTH_WIDTH 24
+  ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_LENGTH_WIDTH 30
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.DMA_2D_TRANSFER 0
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.MAX_BYTES_PER_BURST 4096
   ad_ip_parameter axi_mxfe_rx_dma CONFIG.CYCLIC 0
@@ -447,13 +447,13 @@ if {$INTF_CFG != "TX"} {
   ad_connect  rx_device_clk $adc_data_offload_name/s_axis_aclk
 
   # Clocks
-  ad_connect  $sys_dma_clk $adc_data_offload_name/m_axis_aclk
-  ad_connect  $sys_dma_clk axi_mxfe_rx_dma/s_axis_aclk
+  ad_connect  rx_device_clk $adc_data_offload_name/m_axis_aclk
+  ad_connect  rx_device_clk axi_mxfe_rx_dma/s_axis_aclk
 
   # Resets
   ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/s_axis_aresetn
-  ad_connect  $sys_dma_resetn $adc_data_offload_name/m_axis_aresetn
-  ad_connect  $sys_dma_resetn axi_mxfe_rx_dma/m_dest_axi_aresetn
+  ad_connect  rx_device_clk_rstgen/peripheral_aresetn $adc_data_offload_name/m_axis_aresetn
+  ad_connect  rx_device_clk_rstgen/peripheral_aresetn axi_mxfe_rx_dma/m_dest_axi_aresetn
   ad_connect  $sys_cpu_resetn $adc_data_offload_name/s_axi_aresetn
 
   # Link Layer to Transport Layer
@@ -490,7 +490,26 @@ if {$INTF_CFG != "TX"} {
   if {$ADI_PHY_SEL == 1} {
     ad_mem_hp0_interconnect $sys_cpu_clk axi_mxfe_rx_xcvr/m_axi
   }
-  ad_mem_hp1_interconnect $sys_cpu_clk sys_ps7/S_AXI_HP1
+
+  ad_ip_instance clk_wiz dma_clk_wiz
+  ad_ip_parameter dma_clk_wiz CONFIG.PRIMITIVE MMCM
+  ad_ip_parameter dma_clk_wiz CONFIG.RESET_TYPE ACTIVE_LOW
+  ad_ip_parameter dma_clk_wiz CONFIG.USE_LOCKED false
+  ad_ip_parameter dma_clk_wiz CONFIG.CLKOUT1_REQUESTED_OUT_FREQ 333
+  ad_ip_parameter dma_clk_wiz CONFIG.PRIM_SOURCE No_buffer
+
+set sys_250m_clk_net [get_bd_nets -of_objects [find_bd_objs -relation connected_to [get_bd_pins sys_ps8/pl_clk1]]]
+set sys_250m_clk_pin [get_bd_pins sys_ps8/pl_clk1]
+
+  ad_disconnect $sys_250m_clk_net $sys_250m_clk_pin
+
+
+  ad_connect $sys_cpu_clk    dma_clk_wiz/clk_in1
+  ad_connect $sys_cpu_resetn dma_clk_wiz/resetn
+
+  ad_connect $sys_dma_clk    dma_clk_wiz/clk_out1
+
+  ad_mem_hp1_interconnect $sys_dma_clk sys_ps7/S_AXI_HP1
   ad_mem_hp1_interconnect $sys_dma_clk axi_mxfe_rx_dma/m_dest_axi
 
   # Interrupts
