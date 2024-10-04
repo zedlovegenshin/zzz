@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2014-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -51,22 +51,22 @@ module axi_ad7616_pif #(
 
   // FIFO interface
 
-  output  reg [15:0]      adc_data_0,
-  output  reg [15:0]      adc_data_1,
-  output  reg [15:0]      adc_data_2,
-  output  reg [15:0]      adc_data_3,
-  output  reg [15:0]      adc_data_4,
-  output  reg [15:0]      adc_data_5,
-  output  reg [15:0]      adc_data_6,
-  output  reg [15:0]      adc_data_7,
-  output  reg [15:0]      adc_data_8,
-  output  reg [15:0]      adc_data_9,
-  output  reg [15:0]      adc_data_10,
-  output  reg [15:0]      adc_data_11,
-  output  reg [15:0]      adc_data_12,
-  output  reg [15:0]      adc_data_13,
-  output  reg [15:0]      adc_data_14,
-  output  reg [15:0]      adc_data_15,
+  output  reg [15:0]      adc_data_0 = 16'b0,
+  output  reg [15:0]      adc_data_1 = 16'b0,
+  output  reg [15:0]      adc_data_2 = 16'b0,
+  output  reg [15:0]      adc_data_3 = 16'b0,
+  output  reg [15:0]      adc_data_4 = 16'b0,
+  output  reg [15:0]      adc_data_5 = 16'b0,
+  output  reg [15:0]      adc_data_6 = 16'b0,
+  output  reg [15:0]      adc_data_7 = 16'b0,
+  output  reg [15:0]      adc_data_8 = 16'b0,
+  output  reg [15:0]      adc_data_9 = 16'b0,
+  output  reg [15:0]      adc_data_10 = 16'b0,
+  output  reg [15:0]      adc_data_11 = 16'b0,
+  output  reg [15:0]      adc_data_12 = 16'b0,
+  output  reg [15:0]      adc_data_13 = 16'b0,
+  output  reg [15:0]      adc_data_14 = 16'b0,
+  output  reg [15:0]      adc_data_15 = 16'b0,
 
   output                  adc_valid,
 
@@ -82,7 +82,7 @@ module axi_ad7616_pif #(
   input                   rd_req,
   input                   wr_req,
   input       [15:0]      wr_data,
-  output  reg [15:0]      rd_data = 'hf,
+  output  reg [15:0]      rd_data = 'ha1b2,
   output  reg             rd_valid
 );
 
@@ -113,12 +113,18 @@ module axi_ad7616_pif #(
 
   reg     [ 4:0]                  channel_counter = 5'h0;
   reg     [ 4:0]                  nr_rd_burst = 5'd16;
+  reg                             wr_req_edge = 1'h0;
+  reg                             wr_req_edge_d = 1'h0;
+  reg                             rd_req_edge = 1'h0;
+  reg                             rd_req_edge_d = 1'h0;
 
   // internal wires
 
   wire                            rd_new_data_s;
   wire                            start_transfer_s;
   wire                            rd_valid_s;
+  wire                            adc_valid_d;
+  reg                             adc_valid_s = 1'h0;
 
   // FSM state register
 
@@ -157,12 +163,21 @@ module axi_ad7616_pif #(
     end
   end
 
-  always @(negedge clk) begin
-    if (transfer_state == IDLE) begin
+  always @(posedge clk) begin
       wr_req_d <= wr_req;
+      wr_req_edge <= (wr_req && !wr_req_d);
       rd_req_d <= rd_req;
+      rd_req_edge <= (rd_req && !rd_req_d);
+    if (transfer_state == IDLE) begin
       rd_conv_d <= end_of_conv;
     end
+  end
+
+  //delay with 1 clk
+
+  always @(posedge clk) begin
+    wr_req_edge_d <= wr_req_edge;
+    rd_req_edge_d <= rd_req_edge;
   end
 
   //channel_counter
@@ -249,7 +264,7 @@ module axi_ad7616_pif #(
       end
       CNTRL0_HIGH : begin
         transfer_state_next <= (width_counter != 2'b11) ? CNTRL0_HIGH :
-                               ((wr_req_d == 1'b1) || (rd_req_d == 1'b1)) ? CS_HIGH : CNTRL1_LOW;
+                               ((wr_req_edge_d == 1'b1) || (rd_req_edge_d == 1'b1)) ? CS_HIGH : CNTRL1_LOW;
       end
       CNTRL1_LOW : begin
         transfer_state_next <= (width_counter != 2'b11) ? CNTRL1_LOW : CNTRL1_HIGH;
@@ -269,7 +284,7 @@ module axi_ad7616_pif #(
   // data valid for the register access and m_axis interface
 
   assign rd_valid_s = (((transfer_state == CNTRL0_HIGH) || (transfer_state == CNTRL1_HIGH)) &&
-                       ((rd_req_d == 1'b1) || (rd_conv_d == 1'b1))) ? 1'b1 : 1'b0;
+                       ((rd_req_edge_d == 1'b1) || (rd_conv_d == 1'b1))) ? 1'b1 : 1'b0;
 
   // FSM output logic
 
@@ -283,13 +298,19 @@ module axi_ad7616_pif #(
     rd_valid <= rd_valid_s & ~rd_valid_d;
   end
 
-  //assign adc_valid = rd_valid;
-  assign adc_valid = (channel_counter == 5'd16) ? rd_valid : 1'b0;
+  assign adc_valid_d = (channel_counter == 5'd16) ? rd_valid : 1'b0;
 
-  assign cs_n = (transfer_state == IDLE) ? 1'b1 : 1'b0;
-  assign db_t = ~wr_req_d;
-  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_d == 1'b1)) ||
+  //delay with 1 clk
+
+  always @(posedge clk) begin
+    adc_valid_s <= adc_valid_d;
+  end
+
+  assign adc_valid = adc_valid_s;
+  assign cs_n = (transfer_state == IDLE) || (rd_n == 1'b1) ? 1'b1 : 1'b0;
+  assign db_t = ~wr_req_edge_d;
+  assign rd_n = (((transfer_state == CNTRL0_LOW) && ((rd_conv_d == 1'b1) || rd_req_edge_d == 1'b1)) ||
                   (transfer_state == CNTRL1_LOW)) ? 1'b0 : 1'b1;
-  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_d == 1'b1)) ? 1'b0 : 1'b1;
+  assign wr_n = ((transfer_state == CNTRL0_LOW) && (wr_req_edge_d == 1'b1)) ? 1'b0 : 1'b1;
 
 endmodule

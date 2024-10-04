@@ -169,7 +169,7 @@ module axi_ad7616 #(
   wire                  up_wreq_s;
   wire [13:0]           up_waddr_s;
   wire [31:0]           up_wdata_s;
-  wire [31:0]           up_rdata_s[0:16]; // 8 || 16 ?????
+  wire [31:0]           up_rdata_s[0:16];
   wire [16:0]           up_rack_s;
   wire [16:0]           up_wack_s;
 
@@ -226,7 +226,7 @@ module axi_ad7616 #(
     up_rdata_r = 'h00;
     up_rack_r = 'h00;
     up_wack_r = 'h00;
-    for (j = 0; j <= 16; j=j+1) begin // ??? <= 16 ?????
+    for (j = 0; j <= 16; j=j+1) begin
       up_rack_r = up_rack_r | up_rack_s[j];
       up_wack_r = up_wack_r | up_wack_s[j];
       up_rdata_r = up_rdata_r | up_rdata_s[j];
