@@ -1,5 +1,5 @@
 ###############################################################################
-## Copyright (C) 2019-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2019-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
@@ -10,7 +10,7 @@ source $ad_hdl_dir/projects/scripts/adi_board.tcl
 ##--------------------------------------------------------------
 # IMPORTANT: Set AD7405/ADuM7701 operation and interface mode
 #
-#    LVDS_CMOS_N - Defines the type of the data line: 
+#    LVDS_CMOS_N - Defines the type of the data line:
 #    single ended (ADuM7701, AD7403) or differential (AD7405)
 #
 # LEGEND: single ended - 0
@@ -34,14 +34,14 @@ adi_project_files ad7405_fmc_zed [list \
 switch $LVDS_CMOS_N {
   0 {
     adi_project_files ad7405_fmc_zed [list \
-      "system_top_differential.v" \
-      "system_constr_differential.xdc"]
+      "system_top_lvds.v" \
+      "system_constr_lvds.xdc"]
   }
 
   1 {
     adi_project_files ad7405_fmc_zed [list \
-      "system_top_singlended.v" \
-      "system_constr_singlended.xdc"] 
+      "system_top_cmos.v" \
+      "system_constr_cmos.xdc"]
   }
   default {
     return -code error [format "ERROR: Invalid data line type! Define as \'1\' (single ended) or \'0\' (differential) ..."]

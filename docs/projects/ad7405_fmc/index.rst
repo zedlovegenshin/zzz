@@ -1,27 +1,27 @@
 .. _ad7405_fmc:
 
-EVAL-AD7405 HDL project
+AD7405-FMC HDL project
 ================================================================================
 
 Overview
 -------------------------------------------------------------------------------
 
-The :adi:`EVAL-AD7405 <EVAL-AD7405>` is a full featured evaluation board 
+The :adi:`EVAL-AD7405` is a full-featured evaluation board
 designed to allow the user to easily evaluate all features of the :adi:`AD7405`
 isolated analog-to-digital converter (ADC).
 
-The provided HDL reference design supports the :adi:`AD7405` , :adi:`AD7403` 
-and :adi:`ADuM7701` devices. 
-One of the main difference between these devices is the type of the digital
-data lines. In case of :adi:`ADuM7701` and :adi:`AD7403` it is a single ended
-lines, and in case of the :adi:`AD7405` is differential.
+The provided HDL reference design supports the :adi:`AD7405` , :adi:`AD7403`
+and :adi:`ADuM7701` devices.
+One of the main differences between these devices is the type of the digital
+data lines. In the case of :adi:`ADuM7701` and :adi:`AD7403`, it is
+single-ended, and for :adi:`AD7405` is differential.
 
 Supported boards
 -------------------------------------------------------------------------------
 
--  :adi:`EVAL-AD7405 <EVAL-AD7405>`
--  :adi:`EVAL-AD7403 <EVAL-AD7403>`
--  :adi:`EVAL-ADuM7701 <EVAL-ADuM7701>`
+-  :adi:`EVAL-AD7405`
+-  :adi:`EVAL-AD7403`
+-  :adi:`EVAL-ADuM7701`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD7405 <EVAL-AD7405>` 
+   * - :adi:`EVAL-AD7405 <EVAL-AD7405>`
      - :xilinx:`ZedBoard <products/boards-and-kits/1-8dyf-11.html>`
      - FMC-LPC
    * - :adi:`EVAL-AD7403 <EVAL-AD7403>`
@@ -56,12 +56,12 @@ Block design
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data path and clock domains are depicted in the below diagram:
+The data path and clock domains are depicted in the below diagrams:
 
 Block design for the differential signals (:adi:`AD7405`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../ad7405_fmc/ad7405_zed_diff_block_diagram.svg
+.. image:: ../ad7405_fmc/ad7405_zed_lvds_diagram.svg
    :width: 800
    :align: center
    :alt: AD7405_FMC/ZedBoard block diagram
@@ -69,7 +69,7 @@ Block design for the differential signals (:adi:`AD7405`)
 Block design for the single-ended signals (:adi:`ADuM7701` and :adi:`AD7403`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../ad7405_fmc/ad7405_zed_single_block_diagram.svg
+.. image:: ../ad7405_fmc/ad7405_zed_cmos_diagram.svg
    :width: 800
    :align: center
    :alt: AD7405_FMC/ZedBoard block diagram
@@ -80,7 +80,7 @@ Configuration modes
 -  LVDS_CMOS_N : specific to the type of the data and clock signals
 
    -  0 - Single ended data and clock signals (default)
-   -  1 - Differential data and clock signals 
+   -  1 - Differential data and clock signals
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,9 +90,9 @@ added to the base address from HDL (see more at :ref:`architecture`).
 
 ==================== ===============
 Instance             Zynq/Microblaze
-==================== ===============                              
- axi_ad7405_dma       0x44A3_0000
- axi_adc_clkgen       0x44A4_0000
+==================== ===============
+ axi_ad7405_dma      0x44A3_0000
+ axi_adc_clkgen      0x44A4_0000
 ==================== ===============
 
 GPIOs
@@ -130,7 +130,7 @@ Below are the Programmable Logic interrupts used in this project.
 
 ================ === ========== ===========
 Instance name    HDL Linux Zynq Actual Zynq
-================ === ========== =========== 
+================ === ========== ===========
 axi_ad7405_dma   13  57         89
 ================ === ========== ===========
 
@@ -145,7 +145,7 @@ If you want to build the sources, ADI makes them available on the
 `clone <https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository>`__
 the HDL repository.
 
-Default (Single ended data and clock signals):
+Default (Single-ended data and clock signals):
 
 .. code-block::
    :linenos:
@@ -179,7 +179,7 @@ Hardware related
    -  :adi:`AD7405`
    -  :adi:`AD7403`
    -  :adi:`ADuM7701`
-   
+
 -  `UG-690, EVAL-AD7405FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7405FMCZ_UG-690.pdf>`__
 -  `UG-683, EVAL-AD7403FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EVAL-AD7403FMCZ%20_UG-683.pdf>`__
 -  `UG-1525, EV-ADuM7701-8FMCZ User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/EV-ADuM7701-8FMCZ-UG-1525.pdf>`__
@@ -187,7 +187,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD7405-FMC HDL project source code </projects/ad7405>`
+-  :git-hdl:`AD7405-FMC HDL project source code <projects/ad7405_fmc>`
 
 .. list-table::
    :widths: 30 35 35
