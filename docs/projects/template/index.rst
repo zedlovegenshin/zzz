@@ -17,17 +17,17 @@ Supported boards
 
 **\*IF IT APPLIES**\ \*
 
--  :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
--  :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
+- :adi:`AD9081-FMCA-EBZ <EVAL-AD9081>`
+- :adi:`AD9082-FMCA-EBZ <EVAL-AD9082>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 **\*EXAMPLES**\ \*
 
--  :adi:`AD9081`
--  :adi:`AD9177`
--  :adi:`AD9209`
+- :adi:`AD9081`
+- :adi:`AD9177`
+- :adi:`AD9209`
 
 Supported carriers
 -------------------------------------------------------------------------------
@@ -112,42 +112,42 @@ Configuration modes
 
 The following are the parameters of this project that can be configured:
 
--  JESD_MODE: used link layer encoder mode
+- JESD_MODE: used link layer encoder mode
 
-   -  64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
-      Layer
-   -  8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
-      Layer
+  - 64B66B - 64b66b link layer defined in JESD204C, uses AMD IP as Physical
+    Layer
+  - 8B10B  - 8b10b link layer defined in JESD204B, uses ADI IP as Physical
+    Layer
 
--  RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
--  TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
--  REF_CLK_RATE: the rate of the reference clock
--  [RX/TX]_JESD_M: number of converters per link
--  [RX/TX]_JESD_L: number of lanes per link
--  [RX/TX]_JESD_S: number of samples per frame
--  [RX/TX]_JESD_NP: number of bits per sample
--  [RX/TX]_NUM_LINKS: number of links
--  [RX/TX]_TPL_WIDTH
--  TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through TDD. Must be set to 1 when SHARED_DEVCLK=1
--  SHARED_DEVCLK
--  TDD_CHANNEL_CNT
--  TDD_SYNC_WIDTH
--  TDD_SYNC_INT
--  TDD_SYNC_EXT
--  TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal is added
--  [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
-   kilosamples per converter (M)
--  [ADC/DAC]_DO_MEM_TYPE
--  Check out this guide on more details regarding these parameters:
-   :dokuwiki:`resources/fpga/docs/axi_tdd`
+- RX_LANE_RATE: lane rate of the Rx link (MxFE to FPGA)
+- TX_LANE_RATE: lane rate of the Tx link (FPGA to MxFE)
+- REF_CLK_RATE: the rate of the reference clock
+- [RX/TX]_JESD_M: number of converters per link
+- [RX/TX]_JESD_L: number of lanes per link
+- [RX/TX]_JESD_S: number of samples per frame
+- [RX/TX]_JESD_NP: number of bits per sample
+- [RX/TX]_NUM_LINKS: number of links
+- [RX/TX]_TPL_WIDTH
+- TDD_SUPPORT: set to 1, adds the TDD; enables external synchronization through TDD. Must be set to 1 when SHARED_DEVCLK=1
+- SHARED_DEVCLK
+- TDD_CHANNEL_CNT
+- TDD_SYNC_WIDTH
+- TDD_SYNC_INT
+- TDD_SYNC_EXT
+- TDD_SYNC_EXT_CDC: if enabled, the CDC circuitry for the external sync signal is added
+- [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in
+  kilosamples per converter (M)
+- [ADC/DAC]_DO_MEM_TYPE
+- Check out this guide on more details regarding these parameters:
+  :dokuwiki:`resources/fpga/docs/axi_tdd`
 
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  External clock source
-   :dokuwiki:`AD-SYNCHRONA14-EBZ <resources/eval/user-guides/ad-synchrona14-ebz>`
--  SYSREF clocks are LVDS
--  ADCCLK and REFCLK are LVPECL
+- External clock source
+  :dokuwiki:`AD-SYNCHRONA14-EBZ <resources/eval/user-guides/ad-synchrona14-ebz>`
+- SYSREF clocks are LVDS
+- ADCCLK and REFCLK are LVPECL
 
 \*\* ADD IMAGE IF APPLIES! MUST: Use SVG format \*\*
 
@@ -487,7 +487,7 @@ configure this project, depending on the carrier used.
 Where a cell contains a --- (dash) it means that the parameter doesn't exist
 for that project (ad9081_fmca_ebz/carrier or ad9082_fmca_ebz/carrier).
 
-.. collapsible:: Default values of the ``make`` parameters for AD9082-FMCA-EBZ
+.. collapsible:: Default values of the make parameters for AD9082-FMCA-EBZ
 
    +-------------------+-----------------------------------------------+
    | Parameter         | Default value of the parameters               |
@@ -610,13 +610,13 @@ Resources
 Systems related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Links to the Quick start guides, to the pages where the hardware changes are
+- Links to the Quick start guides, to the pages where the hardware changes are
    specified in detail, etc. in the form of a table as the one below
 
 **THIS IS JUST AN EXAMPLE**
 
--  :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
--  Here you can find all the quick start guides on wiki documentation :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
+- :dokuwiki:`[Wiki] AD9081 & AD9082 & AD9988 & AD9986 Prototyping Platform User Guide <resources/eval/user-guides/ad9081_fmca_ebz>`
+- Here you can find all the quick start guides on wiki documentation :dokuwiki:`[Wiki] AD9081/AD9082/AD9986/AD9988 Quick Start Guides <resources/eval/user-guides/ad9081_fmca_ebz/quickstart>`
 
 Here you can find the quick start guides available for these evaluation boards:
 
@@ -637,35 +637,35 @@ Here you can find the quick start guides available for these evaluation boards:
      - :dokuwiki:`VCK190/VMK180 <resources/eval/user-guides/ad9081_fmca_ebz/quickstart/versal>`
      - :dokuwiki:`A10SoC <resources/eval/user-guides/ad9081/quickstart/a10soc>`
 
--  Other relevant information
+- Other relevant information
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Product datasheets:
+- Product datasheets:
 
-   -  :adi:`AD9081`
-   -  :adi:`AD9082`
-   -  :adi:`AD9988`
-   -  :adi:`AD9986`
--  `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
--  `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
+  - :adi:`AD9081`
+  - :adi:`AD9082`
+  - :adi:`AD9988`
+  - :adi:`AD9986`
+- `UG-1578, Device User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-ad9082-ug-1578.pdf>`__
+- `UG-1829, Evaluation Board User Guide <https://www.analog.com/media/en/technical-documentation/user-guides/ad9081-fmca-ebz-9082-fmca-ebz-ug-1829.pdf>`__
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  Link to the project source code
--  Table like the one below. Must have as first IP (if it exists) the IP that
-   was created with this project (i.e., axi_ad9783). If there isn't, then to
-   be taken in the order they are written in the Makefile of the project,
-   stating the source code link in a column and the documentation link in
-   another column
--  Other relevant information
+- Link to the project source code
+- Table like the one below. Must have as first IP (if it exists) the IP that
+  was created with this project (i.e., axi_ad9783). If there isn't, then to
+  be taken in the order they are written in the Makefile of the project,
+  stating the source code link in a column and the documentation link in
+  another column
+- Other relevant information
 
 **THIS IS JUST AN EXAMPLE**
 
--  :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
--  :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
+- :git-hdl:`AD9081_FMCA_EBZ HDL project source code <projects/ad9081_fmca_ebz>`
+- :git-hdl:`AD9082_FMCA_EBZ HDL project source code <projects/ad9082_fmca_ebz>`
 
 .. list-table::
    :widths: 30 35 35
@@ -713,28 +713,28 @@ HDL related
 
 \**\* MENTION THESE for JESD reference designs \**\*
 
--  :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
--  :ref:`jesd204`
+- :dokuwiki:`[Wiki] Generic JESD204B block designs <resources/fpga/docs/hdl/generic_jesd_bds>`
+- :ref:`jesd204`
 
 \**\* MENTION THIS for SPI Engine reference designs \**\*
 
--  :ref:`SPI Engine Framework documentation <spi_engine>`
+- :ref:`SPI Engine Framework documentation <spi_engine>`
 
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **THIS IS JUST AN EXAMPLE**
 
--  :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
+- :dokuwiki:`[Wiki] AD9081-FMCA-EBZ Linux driver wiki page <resources/tools-software/linux-drivers/iio-mxfe/ad9081>`
 
 If there is no Linux driver page, then insert a link to the code of the driver
 and of the device tree.
 
--  Python support (THIS IS JUST AN EXAMPLE):
+- Python support (THIS IS JUST AN EXAMPLE):
 
-   -  `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
-   -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
-   -  `Example link`_
+  - `AD9081 class documentation <https://analogdevicesinc.github.io/pyadi-iio/devices/adi.ad9081.html>`__
+  - `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
+  - `Example link`_
 
 .. include:: ../common/more_information.rst
 
