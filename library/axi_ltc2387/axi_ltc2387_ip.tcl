@@ -90,6 +90,14 @@ set_property -dict [list \
   "value_validation_list" "0 1" \
 ] [ipx::get_user_parameters TWOLANES -of_objects $cc]
 
+# if TWOLANES=0, disable and tie to GND, ports db_p, db_n
+adi_set_ports_dependency "db_p" \
+  "(spirit:decode(id('MODELPARAM_VALUE.TWOLANES')) == 0)"
+adi_set_ports_dependency "db_n" \
+  "(spirit:decode(id('MODELPARAM_VALUE.TWOLANES')) == 0)"
+
+adi_add_auto_fpga_spec_params
+
 ipx::create_xgui_files $cc
 ipx::update_checksums $cc
 ipx::save_core $cc
