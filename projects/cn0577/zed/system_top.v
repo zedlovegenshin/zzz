@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -36,7 +36,8 @@
 `timescale 1ns/100ps
 
 module system_top (
-
+  parameter TWOLANES = 1
+) (
   inout       [14:0]      ddr_addr,
   inout       [ 2:0]      ddr_ba,
   inout                   ddr_cas_n,
@@ -123,9 +124,7 @@ module system_top (
 
   assign gpio_i[63:34] = gpio_o[63:34];
 
-  // hardcode GPIO to always use two lanes configuration
-
-  assign twolanes_cntrl = 1'b1;
+  assign twolanes_cntrl = TWOLANES;
   assign cnv_en = cnv;
 
   // instantiations

@@ -1,9 +1,14 @@
 ###############################################################################
-## Copyright (C) 2022-2023 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2022-2024 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: ADIBSD
 ###############################################################################
 
-# ltc2387
+set TWOLANES $ad_project_params(TWOLANES)
+
+puts "build parameter value = $TWOLANES"
+
+# ltc2387 i/o
+
 create_bd_port -dir I ref_clk
 create_bd_port -dir O sampling_clk
 create_bd_port -dir I dco_p
@@ -11,8 +16,10 @@ create_bd_port -dir I dco_n
 create_bd_port -dir O cnv
 create_bd_port -dir I da_p
 create_bd_port -dir I da_n
+
 create_bd_port -dir I db_p
 create_bd_port -dir I db_n
+
 create_bd_port -dir O clk_gate
 
 # adc peripheral
@@ -20,10 +27,10 @@ create_bd_port -dir O clk_gate
 ad_ip_instance axi_ltc2387 axi_ltc2387
 ad_ip_parameter axi_ltc2387 CONFIG.ADC_RES 18
 ad_ip_parameter axi_ltc2387 CONFIG.OUT_RES 32
-ad_ip_parameter axi_ltc2387 CONFIG.TWOLANES $two_lanes
+ad_ip_parameter axi_ltc2387 CONFIG.TWOLANES $TWOLANES
 ad_ip_parameter axi_ltc2387 CONFIG.ADC_INIT_DELAY 27
 
-# axi pwm gen
+# axi_pwm_gen
 
 ad_ip_instance axi_pwm_gen axi_pwm_gen
 ad_ip_parameter axi_pwm_gen CONFIG.N_PWMS 2
@@ -58,8 +65,10 @@ ad_connect dco_p      axi_ltc2387/dco_p
 ad_connect dco_n      axi_ltc2387/dco_n
 ad_connect da_p       axi_ltc2387/da_p
 ad_connect da_n       axi_ltc2387/da_n
-ad_connect db_p       axi_ltc2387/db_p
-ad_connect db_n       axi_ltc2387/db_n
+if {$TWOLANES == "1"} {
+  ad_connect db_p       axi_ltc2387/db_p
+  ad_connect db_n       axi_ltc2387/db_n
+}
 
 ad_connect ref_clk                axi_ltc2387_dma/fifo_wr_clk
 ad_connect axi_ltc2387/adc_valid  axi_ltc2387_dma/fifo_wr_en
