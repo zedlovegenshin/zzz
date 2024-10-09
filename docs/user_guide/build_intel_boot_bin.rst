@@ -11,24 +11,23 @@ BootROM and the end user application, configuring the system as needed before
 the larger application can run
 
 
-Below there're useful links who explain in more detail the process and the
-necessary components:
+In the following links you can find more details on the process and the necessary components:
 
--  `Booting and Configuration <https://www.intel.com/content/dam/support/us/en/programmable/support-resources/bulk-container/pdfs/literature/hb/arria-v/av-5400a.pdf#:~:text=This%20topic%20describes%20the%20booting%20of>`__
--  `SocBootFromFPGA <https://community.intel.com/t5/FPGA-Wiki/SocBootFromFPGA/ta-p/735773#:~:text=Introduction.%20The%20HPS%20(Hardened%20Processor%20System)>`__
--  `Intel Bootloader <https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html#:~:text=Intel%C2%AE%20SoC%20FPGAs%20use%20a%20bootloader>`__
+-  `Booting and Configuration <https://www.intel.com/content/dam/support/us/en/programmable/support-resources/bulk-container/pdfs/literature/hb/arria-v/av-5400a.pdf>`__
+-  `SocBootFromFPGA <https://community.intel.com/t5/FPGA-Wiki/SocBootFromFPGA/ta-p/735773>`__
+-  `Intel Bootloader <https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-guidance/soc-bootloader.html>`__
 
 Necessary files for booting up a HDL project
 -------------------------------------------------------------------------------
 
 .. warning::
    
-   We don't provide any scripts to automate this whole process, so please read
-   carefully and follow all the steps in order to obtain the desired results.
+   We **do not** provide any scripts to automate this process, so please read
+   carefully and follow all the steps to obtain the boot file.
 
 When booting a system with Linux + HDL (depending on the project), you will need
 to write the following files on the root of the BOOT FAT32 partition. After that,
-you must write the preloader image in a specific card partition, depending on
+you must write the **preloader image** in a specific card partition, depending on
 the case. 
 
 -  For Arria10 SoC projects:
@@ -63,17 +62,16 @@ the case.
 Examples of building the boot image
 -------------------------------------------------------------------------------
 
-Below is a list of projects supported by us for each carrier to illustrate how
-to build and showcase the different files that are involved in the process. Each
-project has it's own characteristics (some files may be different from a project
-to another).
+This is a list of projects supported by us for each carrier. The purpose is to
+illustrate how to build and showcase the different files that are involved in
+the process. Each project has its own characteristics (some files may differ
+from one project to the other).
 
 .. note::
 
-   Pay attention, each project needs it's own specific Linux Kernel Image &
-   Devicetree to be build. Also, follow these instructions to write the file to
-   your SD card, depending on the operating system that you use (Windows or
-   Linux):
+   Each project has its own specific Linux Kernel Image & Devicetree to be
+   build. Follow these instructions to write the file to your SD card, depending
+   on the operating system that you use (Windows or Linux):
 
    -  :dokuwiki:`[Wiki] Building the Intel SoC-FPGA kernel and devicetrees from source <resources/tools-software/linux-build/generic/socfpga>`
    -  :dokuwiki:`[Wiki] Linux Download and setting up the image <resources/tools-software/linux-software/zynq_images/linux_hosts>`
@@ -99,7 +97,7 @@ Building the Linux Kernel image and the Devicetree
    user@analog:~$ git clone https://github.com/analogdevicesinc/linux.git
    user@analog:~$ cd linux/
    user@analog:~/linux$ export ARCH=arm
-   user@analog:~/linux$ export CROSS_COMPILE=/path/to/your/arm/cross-compiler
+   user@analog:~/linux$ export CROSS_COMPILE=/path_to_cross_compiler/arm-linux-gnueabihf
    user@analog:~/linux$ make socfpga_adi_defconfig
    user@analog:~/linux$ make zImage
    user@analog:~/linux$ make socfpga_arria10_socdk_adrv9371.dtb
@@ -271,7 +269,7 @@ Building the Linux Kernel image and the Devicetree
    user@analog:~$ git clone https://github.com/analogdevicesinc/linux.git
    user@analog:~$ cd linux/
    user@analog:~/linux$ export ARCH=arm
-   user@analog:~/linux$ export CROSS_COMPILE=/path/to/your/arm/cross-compiler
+   user@analog:~/linux$ export CROSS_COMPILE=/path_to_cross_compiler/arm-linux-gnueabihfr
    user@analog:~/linux$ make socfpga_adi_defconfig
    user@analog:~/linux$ make zImage
    user@analog:~/linux$ make socfpga_cyclone5_sockit_arradio.dtb
@@ -456,7 +454,7 @@ Building the Linux Kernel image and the Devicetree
    user@analog:~$ git clone https://github.com/analogdevicesinc/linux.git
    user@analog:~$ cd linux/
    user@analog:~/linux$ export ARCH=arm
-   user@analog:~/linux$ export CROSS_COMPILE=/path/to/your/arm/cross-compiler
+   user@analog:~/linux$ export CROSS_COMPILE=/path_to_cross_compiler/arm-linux-gnueabihf
    user@analog:~/linux$ make socfpga_adi_defconfig
    user@analog:~/linux$ make zImage
    user@analog:~/linux$ make socfpga_cyclone5_de10_nano_cn0540.dtb
