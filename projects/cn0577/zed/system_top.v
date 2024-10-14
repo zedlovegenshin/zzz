@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
   parameter TWOLANES = 1
 ) (
   inout       [14:0]      ddr_addr,

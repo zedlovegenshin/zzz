@@ -96,7 +96,7 @@ adi_set_ports_dependency "db_p" \
 adi_set_ports_dependency "db_n" \
   "(spirit:decode(id('MODELPARAM_VALUE.TWOLANES')) == 0)"
 
-adi_add_auto_fpga_spec_params
+#adi_add_auto_fpga_spec_params
 
 ipx::create_xgui_files $cc
 ipx::update_checksums $cc
