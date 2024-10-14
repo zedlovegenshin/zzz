@@ -30,6 +30,7 @@ ADC/DAC
    axi_ad7616/index
    axi_ad7768/index
    axi_ad777x/index
+   axi_ad9144/index
    axi_ad9265/index
    axi_ad9361/index
    axi_ad9467/index
